@@ -10,12 +10,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100902230341) do
+ActiveRecord::Schema.define(:version => 20100903043355) do
 
   create_table "places", :force => true do |t|
     t.string   "name"
     t.integer  "parent_id"
-    t.boolean  "locked?"
+    t.boolean  "locked"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
