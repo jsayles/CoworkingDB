@@ -1,0 +1,10 @@
+%h1 Places
+.content
+	- if @places.many?
+		%ul
+			- @places.each do |p|
+				%li= p.name
+	- elsif @places.any?
+		%p= @places.first.name
+	- else
+		%p No places yet.

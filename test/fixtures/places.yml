@@ -4,8 +4,61 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+earth: 
+  name: Planet Earth
+
+europe:
+  parent_id: earth
+  name: Europe
+  
+france:
+  parent_id: europe
+  name: France
+
+spain:
+  parent_id: europe
+  name: Spain
+  
+canaries:
+  parent_id: spain
+  name: Canary Islands
+  
+tenerife:
+  parent_id: canaries
+  name: Tenerife
+
+us:
+  parent_id: earth
+  name: United States of America
+
+florida:
+  parent_id: us
+  name: Florida
+
+tampa:
+  parent_id: florida
+  name: Tampa
+  
+washington:
+  parent_id: us
+  name: Washington
+
+king:
+  parent_id: washington
+  name: King County
+  
+seattle:
+  parent_id: king
+  name: Seattle
+
+caphill:
+  parent_id: seattle
+  name: Capitol Hill
+
+mapleleaf:
+  parent_id: seattle
+  name: Maple Leaf
+
+ballard:
+  parent_id: seattle
+  name: Ballard
