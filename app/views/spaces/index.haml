@@ -1,0 +1,10 @@
+%h2= pluralize @spaces.count, "Space"
+
+%p= link_to "Add a space", new_space_path
+
+- if @spaces.any?
+	%ul.spaces
+		- @spaces.each do |space|
+			%li= link_to(name_with_place(space), space)
+- else
+	%p No spaces yet.

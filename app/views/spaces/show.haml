@@ -1,0 +1,19 @@
+%h2= @space.name
+
+- if @space.place
+	%ul.lineage
+		%li= link_to @space.place.name, @space.place
+		- @space.place.lineage.each do |line|
+			%li= link_to line.name, line
+
+- if @space.details?
+	%ul
+		- if @space.twitter?
+			%li= "Twitter: #{@space.twitter}"
+		- if @space.url?
+			%li= raw "Website: #{link_to(@space.url, @space.url)}"
+	
+
+%p.content= simple_format @space.blurb
+
+%p= link_to "Edit", edit_space_path(@space)
