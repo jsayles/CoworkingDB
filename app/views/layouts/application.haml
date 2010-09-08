@@ -1,9 +1,12 @@
 !!! XML
 !!! Strict
 %html{html_attrs()}
-  %head
-    = stylesheet_link_tag :all
-    = javascript_include_tag :defaults
-    = csrf_meta_tag
-  %body
-    = yield
+	%head
+		= stylesheet_link_tag :all
+		= javascript_include_tag :defaults
+		= csrf_meta_tag
+	%body
+		.content
+			%h1= "CoworkingDB"
+			= render :partial => 'shared/navigation'
+			= yield
