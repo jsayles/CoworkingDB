@@ -8,57 +8,57 @@ earth:
   name: Planet Earth
 
 europe:
-  parent_id: earth
+  parent: earth
   name: Europe
   
 france:
-  parent_id: europe
+  parent: europe
   name: France
 
 spain:
-  parent_id: europe
+  parent: europe
   name: Spain
   
 canaries:
-  parent_id: spain
+  parent: spain
   name: Canary Islands
   
 tenerife:
-  parent_id: canaries
+  parent: canaries
   name: Tenerife
 
 us:
-  parent_id: earth
+  parent: earth
   name: United States of America
 
 florida:
-  parent_id: us
+  parent: us
   name: Florida
 
 tampa:
-  parent_id: florida
+  parent: florida
   name: Tampa
   
 washington:
-  parent_id: us
+  parent: us
   name: Washington
 
 king:
-  parent_id: washington
+  parent: washington
   name: King County
   
 seattle:
-  parent_id: king
+  parent: king
   name: Seattle
 
 caphill:
-  parent_id: seattle
+  parent: seattle
   name: Capitol Hill
 
 mapleleaf:
-  parent_id: seattle
+  parent: seattle
   name: Maple Leaf
 
 ballard:
-  parent_id: seattle
+  parent: seattle
   name: Ballard
