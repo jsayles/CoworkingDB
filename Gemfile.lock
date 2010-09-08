@@ -28,6 +28,7 @@ GEM
       activemodel (= 3.0.0)
       activesupport (= 3.0.0)
     activesupport (3.0.0)
+    acts_as_tree (0.1.1)
     arel (1.0.1)
       activesupport (~> 3.0.0)
     builder (2.1.2)
@@ -79,6 +80,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  acts_as_tree
   compass (= 0.10.5)
   haml (= 3.0.18)
   rails (= 3.0.0)
