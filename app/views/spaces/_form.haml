@@ -18,9 +18,9 @@
 		= form.text_area :blurb, :cols => 45, :rows => 10
 
 	%fieldset
-		- form.fields_for :place do |place_fields|
-			= place_fields.label :name, "Place Name"
-			= place_fields.text_field :name
+		= form.fields_for :place do |ff|
+			= ff.label :name, "Place Name"
+			= ff.text_field :name
 
 	%fieldset
 		= form.submit
