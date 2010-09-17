@@ -1,3 +1,5 @@
+#TODO should *really* only change a file if it's in source control and has no other changes
+
 def clean_whitespace(file_name)
   lines = []
   File.open(file_name) do |file|
