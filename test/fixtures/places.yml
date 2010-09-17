@@ -27,9 +27,41 @@ tenerife:
   parent: canaries
   name: Tenerife
 
-us:
+northamerica:
   parent: earth
-  name: United States of America
+  name: North America
+
+sourthamerica:
+  parent: earth
+  name: South America
+  
+africa:
+  parent: earth
+  name: Africa
+
+asia:
+  parent: earth
+  name: Asia
+  
+antarctica:
+  parent: earth
+  name: Antartica
+
+us:
+  parent: northamerica
+  name: United States
+  
+canada:
+  parent: northamerica
+  name: Canada
+  
+venezuela:
+  parent: southamerica
+  name: South America
+  
+brazil:
+  parent: southamerica
+  name: Brazil
 
 florida:
   parent: us
