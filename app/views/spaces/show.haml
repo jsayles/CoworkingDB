@@ -8,12 +8,12 @@
 
 - if @space.details?
   %ul
-    - if @space.twitter?
-      %li= "Twitter: #{@space.twitter}"
+    - if @space.twitter_url?
+      %li= "Twitter: #{@space.twitter_url}"
     - if @space.url?
       %li= raw "Website: #{link_to(@space.url, @space.url)}"
 
 
-%p.content= simple_format @space.blurb
+%p.content= simple_format @space.description
 
 %p= link_to "Edit", edit_space_path(@space)

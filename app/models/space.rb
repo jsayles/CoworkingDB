@@ -9,7 +9,7 @@ class Space < ActiveRecord::Base
 
 
   def details?
-    true if url? || twitter? || coords?
+    url? || twitter_url?
   end
 
 end

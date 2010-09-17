@@ -10,12 +10,12 @@
       = form.label :url, "Website"
       = form.text_field :url
     %p
-      = form.label :twitter
-      = form.text_field :twitter
+      = form.label :twitter_url
+      = form.text_field :twitter_url
 
   %fieldset
-    = form.label :blurb
-    = form.text_area :blurb, :cols => 45, :rows => 10
+    = form.label :description
+    = form.text_area :description, :cols => 45, :rows => 10
 
   %fieldset
     = form.fields_for :place do |ff|

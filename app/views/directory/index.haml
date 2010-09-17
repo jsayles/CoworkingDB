@@ -4,12 +4,10 @@
 
 .spaces_list
   %h2 Coworking Spaces
-  - if @spaces.many?
+  - if @spaces.any?
     %ul.spaces
       - @spaces.each do |space|
         %li= link_to(name_with_place(space), space)
-  - elsif @spaces.any?
-    %p= @spaces.first.name
   - else
     %p No spaces yet.
 .places_list

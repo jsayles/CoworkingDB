@@ -3,7 +3,6 @@ class CreatePlaces < ActiveRecord::Migration
     create_table :places do |t|
       t.string        :name
       t.integer       :parent_id
-      t.boolean       :locked?
       t.timestamps
     end
   end
