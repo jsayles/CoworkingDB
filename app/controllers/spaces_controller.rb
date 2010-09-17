@@ -6,7 +6,6 @@ class SpacesController < ApplicationController
 
   def new
     @space = Space.new(params[:space])
-    @space.build_place
 
   end
 

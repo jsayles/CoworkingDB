@@ -1,4 +1,5 @@
 %h2= @space.name
+%p= link_to "Edit", edit_space_path(@space)
 
 #map
 
@@ -18,6 +19,10 @@
 %p.content= simple_format @space.description
 
 %p= link_to "Edit", edit_space_path(@space)
+
+
+%p.footer= "last updated #{time_ago_in_words(@space.updated_at)} ago"
+
 
 :javascript
   var spaceData = #{[@space].to_json};
