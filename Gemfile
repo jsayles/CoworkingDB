@@ -6,11 +6,11 @@ gem 'sqlite3-ruby', '1.2.5', :require => 'sqlite3'
 gem 'haml', '3.0.18'
 gem 'compass', '>= 0.10.5'
 gem 'ruby-debug'
-gem 'awesome_print'
 gem 'acts_as_tree'
 gem 'hassle', :git => 'git://github.com/neonlex/hassle.git', :ref => '099b385d'
 
 group :development do
+  gem 'awesome_print'
   # sadly, the mainline version of this doesn't support rails 3
   gem 'rails-footnotes', :git => 'http://github.com/indirect/rails-footnotes.git', :ref => '5fd43b5'
 end

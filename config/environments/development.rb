@@ -27,5 +27,8 @@ Directory::Application.configure do
     Footnotes::Filter.notes = [:controller, :view, :layout, :partials, :stylesheets, :javascripts, :current_user, :flash, :assigns, :session, :cookies, :params, :filters, :routes, :env]
     Footnotes::Filter.no_style = true
   end
+
+  # loads up 'awesome_print'
+  require 'ap'
 end
 
