@@ -1,4 +1,13 @@
 GIT
+  remote: git://github.com/neonlex/hassle.git
+  revision: 099b385d0b5b32599816b5a8f5cbd4cc79aa11ef
+  ref: 099b385d
+  specs:
+    hassle (0.0.1)
+      haml
+      rack
+
+GIT
   remote: http://github.com/indirect/rails-footnotes.git
   revision: 5fd43b5842bac2a41c271e3d3713d5f721ae4e62
   ref: 5fd43b5
@@ -92,6 +101,7 @@ DEPENDENCIES
   awesome_print
   compass (>= 0.10.5)
   haml (= 3.0.18)
+  hassle!
   rails (= 3.0.0)
   rails-footnotes!
   ruby-debug

@@ -8,6 +8,7 @@ gem 'compass', '>= 0.10.5'
 gem 'ruby-debug'
 gem 'awesome_print'
 gem 'acts_as_tree'
+gem 'hassle', :git => 'git://github.com/neonlex/hassle.git', :ref => '099b385d'
 
 group :development do
   # sadly, the mainline version of this doesn't support rails 3
