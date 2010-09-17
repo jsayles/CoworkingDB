@@ -4,13 +4,13 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-earth: 
+earth:
   name: Planet Earth
 
 europe:
   parent: earth
   name: Europe
-  
+
 france:
   parent: europe
   name: France
@@ -18,11 +18,11 @@ france:
 spain:
   parent: europe
   name: Spain
-  
+
 canaries:
   parent: spain
   name: Canary Islands
-  
+
 tenerife:
   parent: canaries
   name: Tenerife
@@ -38,7 +38,7 @@ florida:
 tampa:
   parent: florida
   name: Tampa
-  
+
 washington:
   parent: us
   name: Washington
@@ -46,7 +46,7 @@ washington:
 king:
   parent: washington
   name: King County
-  
+
 seattle:
   parent: king
   name: Seattle

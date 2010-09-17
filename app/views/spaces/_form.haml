@@ -1,26 +1,26 @@
 = render "shared/error_messages", :target => @space
 = form_for @space do |form|
-	%fieldset
-		= form.label :name
-		= form.text_field :name
+  %fieldset
+    = form.label :name
+    = form.text_field :name
 
-	%fieldset
-		%legend Details
-		%p
-			= form.label :url, "Website"
-			= form.text_field :url
-		%p
-			= form.label :twitter
-			= form.text_field :twitter
-			
-	%fieldset
-		= form.label :blurb
-		= form.text_area :blurb, :cols => 45, :rows => 10
+  %fieldset
+    %legend Details
+    %p
+      = form.label :url, "Website"
+      = form.text_field :url
+    %p
+      = form.label :twitter
+      = form.text_field :twitter
 
-	%fieldset
-		= form.fields_for :place do |ff|
-			= ff.label :name, "Place Name"
-			= ff.text_field :name
+  %fieldset
+    = form.label :blurb
+    = form.text_area :blurb, :cols => 45, :rows => 10
 
-	%fieldset
-		= form.submit
+  %fieldset
+    = form.fields_for :place do |ff|
+      = ff.label :name, "Place Name"
+      = ff.text_field :name
+
+  %fieldset
+    = form.submit

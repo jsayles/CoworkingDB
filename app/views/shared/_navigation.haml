@@ -1,6 +1,5 @@
 %ul#navigation
-	%li{:class => controller_name == "directory" ? "on" : "off"}= link_to "Directory", root_path
-	%li{:class => controller_name == "recent" ? "on" : "off"}= link_to "Recent Activity", places_path
-	%li{:class => controller_name == "about" ? "on" : "off"}= link_to "About Coworking", places_path
-	%li{:class => controller_name == "share" ? "on" : "off"}= link_to "Share", places_path
-	
+  %li{:class => controller_name == "directory" ? "on" : "off"}= link_to "Directory", root_path
+  %li{:class => controller_name == "recent" ? "on" : "off"}= link_to "Recent Activity", places_path
+  %li{:class => controller_name == "about" ? "on" : "off"}= link_to "About Coworking", places_path
+  %li{:class => controller_name == "share" ? "on" : "off"}= link_to "Share", places_path

@@ -3,19 +3,19 @@
 %p.add_button= link_to "Add a coworking space", new_space_path
 
 .spaces_list
-	%h2 Coworking Spaces
-	- if @spaces.many?
-		%ul.spaces
-			- @spaces.each do |space|
-				%li= link_to(name_with_place(space), space)
-	- elsif @spaces.any?
-		%p= @spaces.first.name
-	- else
-		%p No spaces yet.
+  %h2 Coworking Spaces
+  - if @spaces.many?
+    %ul.spaces
+      - @spaces.each do |space|
+        %li= link_to(name_with_place(space), space)
+  - elsif @spaces.any?
+    %p= @spaces.first.name
+  - else
+    %p No spaces yet.
 .places_list
-	%h2 Regions
-	- if @places.any?
-		%ul.places
-			= render :partial => 'places/place', :collection => @places
-	- else
-		%p No places yet.
+  %h2 Regions
+  - if @places.any?
+    %ul.places
+      = render :partial => 'places/place', :collection => @places
+  - else
+    %p No places yet.

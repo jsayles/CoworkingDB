@@ -1,7 +1,7 @@
 %h2= pluralize Place.all.count, "Place"
 
 - if @places.any?
-	%ul.places
-		= render :partial => 'place', :collection => @places
+  %ul.places
+    = render :partial => 'place', :collection => @places
 - else
-	%p No places yet.
+  %p No places yet.

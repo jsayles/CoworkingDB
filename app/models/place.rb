@@ -8,7 +8,7 @@ class Place < ActiveRecord::Base
   def name_with_space_count
     spaces.any? ? "#{name} (#{spaces.count})" : name
   end
-  
+
   def lineage
     list = []
     if parent
@@ -17,7 +17,7 @@ class Place < ActiveRecord::Base
     end
     list.flatten
   end
-  
+
   def descendants
     list = []
     if children.any?
@@ -28,7 +28,7 @@ class Place < ActiveRecord::Base
     end
     list.flatten
   end
-  
+
   def all_spaces
     list = []
     list << spaces
