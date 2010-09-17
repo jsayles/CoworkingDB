@@ -22,5 +22,10 @@ Directory::Application.configure do
 
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
+
+  if defined?(Footnotes)
+    Footnotes::Filter.notes = [:controller, :view, :layout, :partials, :stylesheets, :javascripts, :current_user, :flash, :assigns, :session, :cookies, :params, :filters, :routes, :env]
+    Footnotes::Filter.no_style = true
+  end
 end
 
