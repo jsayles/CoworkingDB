@@ -4,17 +4,16 @@ officenomads:
   place: caphill
   name: Office Nomads
   url: http://www.officenomads.com
-  twitter: OfficeNomads
-  blurb: We are a coworking office in Seattle and we like coffee.
-  hidden: false
+  twitter_url: http://twitter.com/OfficeNomads
+  description: We are a coworking office in Seattle and we like coffee.
 
 finalhorizons:
   place: tampa
   name: Final Horizons Retirment Coworking Villa
   url: http://www.finalhorizonsvilla.com
-  blurb: We have portable typewriters and ashtrays available upon request.
+  description: We have portable typewriters and ashtrays available upon request.
 
 eltrabajo:
   place: tenerife
   name: El Trabajo de la Caracoles Magnificos
-  blurb: Whoever wrote this doesn't know much Spanish.
+  description: Whoever wrote this doesn't know much Spanish.
