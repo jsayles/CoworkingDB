@@ -39,8 +39,6 @@ function addSpaces(map, spacesArray, opt_showAll) {
     }
 
     if (opt_showAll) {
-      console.debug(map)
-      console.debug(bounds.getCenter());
       if (spacesArray.length > 1) {
         map.fitBounds(bounds);
       } else {
