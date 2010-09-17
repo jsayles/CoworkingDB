@@ -3,6 +3,7 @@
 %html{html_attrs()}
 	%head
 		= stylesheet_link_tag :all
+		= stylesheet_link_tag 'compiled/screen', :media => 'screen, projection'
 		= javascript_include_tag :defaults
 		= csrf_meta_tag
 	%body

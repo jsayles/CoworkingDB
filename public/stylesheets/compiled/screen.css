@@ -1,0 +1,206 @@
+/* line 14, ../../../../../../.rvm/gems/ree-1.8.7-2010.02/gems/compass-0.10.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+}
+
+/* line 17, ../../../../../../.rvm/gems/ree-1.8.7-2010.02/gems/compass-0.10.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+body {
+  line-height: 1;
+  color: black;
+  background: white;
+}
+
+/* line 19, ../../../../../../.rvm/gems/ree-1.8.7-2010.02/gems/compass-0.10.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 21, ../../../../../../.rvm/gems/ree-1.8.7-2010.02/gems/compass-0.10.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  vertical-align: middle;
+}
+
+/* line 23, ../../../../../../.rvm/gems/ree-1.8.7-2010.02/gems/compass-0.10.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+/* line 25, ../../../../../../.rvm/gems/ree-1.8.7-2010.02/gems/compass-0.10.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q, blockquote {
+  quotes: "" "";
+}
+/* line 96, ../../../../../../.rvm/gems/ree-1.8.7-2010.02/gems/compass-0.10.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+}
+
+/* line 27, ../../../../../../.rvm/gems/ree-1.8.7-2010.02/gems/compass-0.10.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+a img {
+  border: none;
+}
+
+/* line 3, ../../../app/stylesheets/screen.sass */
+body {
+  text-align: center;
+  font-family: "Bitstream Vera Sans", "DejaVu Sans", sans;
+  letter-spacing: -0.1em;
+  background: mintcream;
+}
+
+/* line 9, ../../../app/stylesheets/screen.sass */
+.content {
+  width: 750px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+/* line 14, ../../../app/stylesheets/screen.sass */
+fieldset {
+  margin: 20px 0;
+  border: solid 1px seagreen;
+  background: mediumseagreen;
+}
+
+/* line 19, ../../../app/stylesheets/screen.sass */
+#map {
+  margin: 10px 0;
+  padding: 50px 0;
+  width: 100%;
+  text-align: center;
+  background-color: midnightblue;
+}
+/* line 25, ../../../app/stylesheets/screen.sass */
+#map img {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* line 30, ../../../app/stylesheets/screen.sass */
+ul#navigation {
+  margin: 10px 0;
+  height: 40px;
+  padding: 0;
+}
+/* line 34, ../../../app/stylesheets/screen.sass */
+ul#navigation li {
+  height: 28px;
+  padding: 8px;
+  border-style: solid;
+  border-color: antiquewhite;
+  background: linen;
+  border-width: 1px;
+  display: inline;
+}
+/* line 42, ../../../app/stylesheets/screen.sass */
+ul#navigation li a {
+  text-decoration: none;
+  color: #393939;
+}
+/* line 45, ../../../app/stylesheets/screen.sass */
+ul#navigation li.on {
+  background-color: #333333;
+  border: solid 1px black;
+}
+/* line 48, ../../../app/stylesheets/screen.sass */
+ul#navigation li.on a {
+  color: white;
+}
+
+/* line 51, ../../../app/stylesheets/screen.sass */
+.add_button {
+  height: 32px;
+  line-height: 32px;
+  padding: 5px 20px;
+  margin: 0;
+}
+/* line 56, ../../../app/stylesheets/screen.sass */
+.add_button a {
+  text-decoration: none;
+  color: darkgreen;
+}
+/* line 59, ../../../app/stylesheets/screen.sass */
+.add_button:before {
+  content: url('/images/icons/add.png?1284694917');
+  padding-right: 10px;
+}
+
+/* line 63, ../../../app/stylesheets/screen.sass */
+.spaces_list, .places_list {
+  vertical-align: top;
+}
+
+/* line 66, ../../../app/stylesheets/screen.sass */
+.spaces_list {
+  float: left;
+  width: 496px;
+}
+
+/* line 70, ../../../app/stylesheets/screen.sass */
+.places_list {
+  float: right;
+  width: 246px;
+}
+
+/* line 75, ../../../app/stylesheets/screen.sass */
+ul.places, ul.spaces {
+  margin-left: 0;
+  padding-left: 0;
+}
+/* line 78, ../../../app/stylesheets/screen.sass */
+ul.places ul, ul.spaces ul {
+  margin-left: 8px;
+  padding-left: 0;
+}
+/* line 81, ../../../app/stylesheets/screen.sass */
+ul.places li {
+  list-style: none inside url('/images/icons/tag_blue.png?1284694917');
+  border-bottom: solid 1px #cccccc;
+}
+/* line 84, ../../../app/stylesheets/screen.sass */
+ul.spaces li {
+  list-style: disc inside url('/images/icons/star.png?1284694917');
+}
+/* line 86, ../../../app/stylesheets/screen.sass */
+ul.places li, ul.spaces li {
+  height: 40px;
+  line-height: 40px;
+}
+/* line 89, ../../../app/stylesheets/screen.sass */
+ul.places li a, ul.spaces li a {
+  text-decoration: none;
+}
+/* line 91, ../../../app/stylesheets/screen.sass */
+ul.lineage {
+  margin: 0;
+  padding: 0;
+}
+/* line 94, ../../../app/stylesheets/screen.sass */
+ul.lineage li {
+  display: inline-block;
+  padding-right: 10px;
+}
+/* line 97, ../../../app/stylesheets/screen.sass */
+ul.lineage li:before {
+  content: url('/images/icons/tag_blue.png?1284694917');
+  padding-right: 3px;
+}
