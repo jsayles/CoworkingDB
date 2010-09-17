@@ -18,22 +18,32 @@ function initMap() {
   var map = new google.maps.Map(document.getElementById("map"), myOptions);
 
   if (spaceData) {
-    addSpaces(map, spaceData);
+    addSpaces(map, spaceData, true);
   }
 }
 
 
 
-function addSpaces(map, spacesArray) {
-  for (var i in spacesArray) {
-    var space = spacesArray[i]['space'];
-    var myLatlng = new google.maps.LatLng(space['lat'], space['long']);
+function addSpaces(map, spacesArray, opt_showAll) {
+  if (spacesArray && spacesArray.length) {
+    var bounds = new google.maps.LatLngBounds();
 
-    var marker = new google.maps.Marker({
-      position: myLatlng,
-      map: map,
-      title: space['name']
-    });
+    for (var i in spacesArray) {
+      var space = spacesArray[i]['space'];
+      var latLng = new google.maps.LatLng(space['lat'], space['long']);
+      bounds.extend(latLng);
+
+      var marker = new google.maps.Marker({
+        position: latLng,
+        map: map,
+        title: space['name']
+      });
+    }
+
+    if (opt_showAll) {
+      map.fitBounds(bounds);
+    }
+
   }
 }
 
