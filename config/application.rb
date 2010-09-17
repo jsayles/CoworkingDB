@@ -9,7 +9,7 @@ Bundler.require(:default, Rails.env) if defined?(Bundler)
 module Directory
   class Application < Rails::Application
 
-    config.action_view.javascript_expansions[:defaults] = %w(jquery-1.4.1.min rails application)
+    config.action_view.javascript_expansions[:defaults] = %w(jquery-1.4.1.min rails)
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
