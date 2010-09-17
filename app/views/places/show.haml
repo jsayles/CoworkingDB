@@ -1,6 +1,8 @@
 %h2= @place.name
+%p= link_to "Edit", edit_place_path(@place)
 
 %h3= pluralize @place.descendants.count, "Place"
+
 
 %ul.places
   = render :partial => 'place', :collection => @place.children

@@ -1,0 +1,13 @@
+= render "shared/error_messages", :target => @place
+= form_for @place do |form|
+	%fieldset
+		%p
+			= form.label :name
+			= form.text_field :name
+
+		%p
+			= form.label :parent_id, "Parent"
+			= form.collection_select :parent_id, Place.order("name ASC"), :id, :name
+
+	%fieldset
+		= form.submit
