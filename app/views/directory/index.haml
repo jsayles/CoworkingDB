@@ -17,3 +17,6 @@
       = render :partial => 'places/place', :collection => @places
   - else
     %p No places yet.
+
+:javascript
+  var spaceData = #{@spaces.to_json};

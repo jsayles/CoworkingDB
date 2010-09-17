@@ -1,17 +1,18 @@
 %h2= @space.name
 
+%span= @space.coordinates.inspect
+
 - if @space.place
   %ul.lineage
     %li= link_to @space.place.name, @space.place
     - @space.place.lineage.each do |line|
       %li= link_to line.name, line
 
-- if @space.details?
-  %ul
-    - if @space.twitter_url?
-      %li= "Twitter: #{@space.twitter_url}"
-    - if @space.url?
-      %li= raw "Website: #{link_to(@space.url, @space.url)}"
+%ul
+  - if @space.twitter_url?
+    %li= "Twitter: #{@space.twitter_url}"
+  - if @space.url?
+    %li= raw "Website: #{link_to(@space.url, @space.url)}"
 
 
 %p.content= simple_format @space.description

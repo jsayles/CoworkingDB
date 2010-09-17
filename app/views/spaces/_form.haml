@@ -6,12 +6,18 @@
 
   %fieldset
     %legend Details
-    %p
+    %div
       = form.label :url, "Website"
       = form.text_field :url
-    %p
+    %div
       = form.label :twitter_url
       = form.text_field :twitter_url
+    %div
+      = form.label :lat
+      = form.text_field :lat
+    %div
+      = form.label :long
+      = form.text_field :long
 
   %fieldset
     = form.label :description
