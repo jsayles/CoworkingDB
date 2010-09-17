@@ -31,6 +31,7 @@ GEM
     acts_as_tree (0.1.1)
     arel (1.0.1)
       activesupport (~> 3.0.0)
+    awesome_print (0.2.1)
     builder (2.1.2)
     columnize (0.3.1)
     compass (0.10.5)
@@ -81,7 +82,8 @@ PLATFORMS
 
 DEPENDENCIES
   acts_as_tree
-  compass (= 0.10.5)
+  awesome_print
+  compass (>= 0.10.5)
   haml (= 3.0.18)
   rails (= 3.0.0)
   ruby-debug
