@@ -9,10 +9,8 @@ function footnotes_hide() {
 
 
 function initMap() {
-  var myLatlng = new google.maps.LatLng(47.616, -122.323);
   var myOptions = {
     zoom: 16,
-    center: myLatlng,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
   var map = new google.maps.Map(document.getElementById("map"), myOptions);
@@ -41,7 +39,13 @@ function addSpaces(map, spacesArray, opt_showAll) {
     }
 
     if (opt_showAll) {
-      map.fitBounds(bounds);
+      console.debug(map)
+      console.debug(bounds.getCenter());
+      if (spacesArray.length > 1) {
+        map.fitBounds(bounds);
+      } else {
+        map.setCenter(bounds.getCenter());
+      }
     }
 
   }
