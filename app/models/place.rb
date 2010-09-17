@@ -5,6 +5,8 @@ class Place < ActiveRecord::Base
   has_many :spaces
   acts_as_tree
 
+  scope :root, where("parent_id IS NULL OR parent_id = ''").order("name ASC")
+
   def name_with_space_count
     spaces.any? ? "#{name} (#{spaces.count})" : name
   end

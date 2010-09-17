@@ -1,7 +1,7 @@
 class PlacesController < ApplicationController
 
   def index
-    @places = Place.where("parent_id IS NULL").order("name ASC")
+    @places = Place.root
   end
 
   def show
