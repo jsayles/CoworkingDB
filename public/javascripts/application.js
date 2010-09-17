@@ -51,6 +51,24 @@ function addSpaces(map, spacesArray, opt_showAll) {
 
 
 
+function addStats() {
+  add_script("http://www.google-analytics.com/ga.js");
+  add_script("http://www.statcounter.com/counter/counter_xhtml.js")
+};
+
+
+
+function add_script(script_uri) {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.async = true;
+  script.src = script_uri;
+  var s = document.getElementsByTagName('script')[0];
+  s.parentNode.insertBefore(script, s);
+}
+
+
+
 function placeMarker(map, location) {
   var clickedLocation = new google.maps.LatLng(location);
   var marker = new google.maps.Marker({
@@ -62,4 +80,7 @@ function placeMarker(map, location) {
 $(document).ready(function() {
   $('#footnotes_debug').each(footnotes_hide);
   $('#map').each(initMap);
+  if(doStats){
+    addStats();
+  }
 });
