@@ -6,6 +6,8 @@ officenomads:
   url: http://www.officenomads.com
   twitter_url: http://twitter.com/OfficeNomads
   description: We are a coworking office in Seattle and we like coffee.
+  lat: 47.616
+  long: -122.323
 
 finalhorizons:
   place: tampa
@@ -17,3 +19,4 @@ eltrabajo:
   place: tenerife
   name: El Trabajo de la Caracoles Magnificos
   description: Whoever wrote this doesn't know much Spanish.
+  
