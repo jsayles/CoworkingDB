@@ -41,6 +41,7 @@ application.map = function() {
   };
   var map = new google.maps.Map(document.getElementById("map"), myOptions);
 
+  var spaceData = spaceData || null;
   if (spaceData) {
     application.map._addSpaces(map, spaceData, true);
   }
