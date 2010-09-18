@@ -1,18 +1,18 @@
-var application = function() {
+var Application = function() {
   if (document.getElementById('footnotes_debug')) {
-    application._initFootnotes();
+    Application._initFootnotes();
   }
   if (document.getElementById('map')) {
-    new application.map();
+    this.map = new Application.Map('map');
   }
 
   var doStats = doStats || false;
   if (doStats) {
-    application._addStats();
+    Application._addStats();
   }
 };
 
-application._initFootnotes = function() {
+Application._initFootnotes = function() {
   $('#footnotes_debug').hide();
   var toggle = document.createElement('input');
   $(toggle).attr('id', 'footnotes_debug_toggler').attr('type', 'button').attr('value', 'FN').click(function() {
@@ -20,12 +20,12 @@ application._initFootnotes = function() {
   }).appendTo($(document.body));
 };
 
-application._addStats = function() {
-  application._addScript("http://www.google-analytics.com/ga.js");
-  application._addScript("http://www.statcounter.com/counter/counter_xhtml.js");
+Application._addStats = function() {
+  Application._addScript("http://www.google-analytics.com/ga.js");
+  Application._addScript("http://www.statcounter.com/counter/counter_xhtml.js");
 };
 
-application._addScript = function(script_uri) {
+Application._addScript = function(script_uri) {
   var script = document.createElement('script');
   script.type = 'text/javascript';
   script.async = true;
@@ -34,20 +34,27 @@ application._addScript = function(script_uri) {
   s.parentNode.insertBefore(script, s);
 };
 
-application.map = function() {
-  var myOptions = {
-    zoom: 16,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-  };
-  var map = new google.maps.Map(document.getElementById("map"), myOptions);
+Application.Map = function(elementId) {
+  var element = document.getElementById(elementId);
+  if (element) {
+    var myOptions = {
+      zoom: 16,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var map = new google.maps.Map(element, myOptions);
 
-  var spaceData = spaceData || null;
-  if (spaceData) {
-    application.map._addSpaces(map, spaceData, true);
+    var spaceData = spaceData || null;
+    if (spaceData) {
+      Application.Map._addSpaces(map, spaceData, true);
+    }
+    return map;
+  }
+  else{
+    throw("Could not find elementId provided:" + elementId);
   }
 };
 
-application.map._addSpaces = function(map, spacesArray, opt_showAll) {
+Application.Map._addSpaces = function(map, spacesArray, opt_showAll) {
   if (spacesArray && spacesArray.length) {
     var bounds = new google.maps.LatLngBounds();
 
@@ -74,4 +81,7 @@ application.map._addSpaces = function(map, spacesArray, opt_showAll) {
   }
 };
 
-$(document).ready(application);
+var application;
+$(document).ready(function() {
+  application = new Application();
+});
