@@ -34,7 +34,7 @@ northamerica:
 sourthamerica:
   parent: earth
   name: South America
-  
+
 africa:
   parent: earth
   name: Africa
@@ -42,7 +42,7 @@ africa:
 asia:
   parent: earth
   name: Asia
-  
+
 antarctica:
   parent: earth
   name: Antartica
@@ -50,15 +50,15 @@ antarctica:
 us:
   parent: northamerica
   name: United States
-  
+
 canada:
   parent: northamerica
   name: Canada
-  
+
 venezuela:
   parent: southamerica
   name: South America
-  
+
 brazil:
   parent: southamerica
   name: Brazil
