@@ -45,7 +45,11 @@ Application.Searcher.prototype._success = function(location, newAdress) {
   $(this.m_latField).val(location.lat());
   $(this.m_longField).val(location.lng());
 
-  new google.maps.Marker({
+  if(this.m_marker){
+    this.m_marker.setMap(null);
+  }
+
+  this.m_marker = new google.maps.Marker({
     position: location,
     map: this.m_map
   });
