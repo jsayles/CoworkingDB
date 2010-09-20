@@ -1,14 +1,14 @@
-Application.Searcher = function(searchFieldId, statusId, addressFieldId, latFieldId, longFieldId, map) {
-  this.m_inputField = document.getElementById(searchFieldId);
-  this.m_latField = document.getElementById(latFieldId);
-  this.m_longField = document.getElementById(longFieldId);
-  this.m_addressField = document.getElementById(addressFieldId);
-  this.m_statusDiv = document.getElementById(statusId);
+Application.Searcher = function(searchFieldSelector, statusSelector, addressFieldSelector, latFieldSelector, longFieldSelector, map) {
+  this.m_inputSelector = searchFieldSelector;
+  this.m_latSelector = latFieldSelector;
+  this.m_longSelector = longFieldSelector;
+  this.m_addressSelector = addressFieldSelector;
+  this.m_statusSelector = statusSelector;
   this.m_map = map;
 };
 
 Application.Searcher.prototype.update = function() {
-  var searchString = this.m_inputField.value;
+  var searchString = $(this.m_inputSelector).val();
   this._searchAddress(searchString, this._success, this._error);
   this._status("Searching...");
 };
@@ -41,9 +41,9 @@ Application.Searcher.prototype._searchAddress = function codeAddress(searchStrin
 };
 
 Application.Searcher.prototype._success = function(location, newAdress) {
-  $(this.m_addressField).val(newAdress);
-  $(this.m_latField).val(location.lat());
-  $(this.m_longField).val(location.lng());
+  $(this.m_addressSelector).val(newAdress);
+  $(this.m_latSelector).val(location.lat());
+  $(this.m_longSelector).val(location.lng());
 
   this._clearMarker();
 
@@ -71,9 +71,9 @@ Application.Searcher.prototype._error = function(message, opt_bounds) {
 
 Application.Searcher.prototype._status = function(message) {
   if (message) {
-    $(this.m_statusDiv).show().text(message);
+    $(this.m_statusSelector).show().text(message);
   } else {
-    $(this.m_statusDiv).hide().text('');
+    $(this.m_statusSelector).hide().text('');
   }
 };
 
@@ -86,7 +86,7 @@ Application.Searcher.prototype._clearMarker = function() {
 
 var searcher;
 $(document).ready(function() {
-  searcher = new Application.Searcher('searchField', 'searchStatus', 'address', 'lat', 'long', application.map);
+  searcher = new Application.Searcher('#searchField', '#searchStatus', '#address', '#lat', '#long', application.map);
   searcher.update();
 
   $("#searchField").keyup(function(event) {
