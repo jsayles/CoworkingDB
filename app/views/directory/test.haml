@@ -1,26 +1,16 @@
-%style
-  :sass
-    #searchStatus
-      display: inline-block
-
-    input[type='textbox']
-      width: 300px
-
-
-#map
-%p
-  Type in an address, hit 'geocode', see what happens
-%div
-  %input#searchField(type="textbox" value="1410 E Pine St, 98122")
-  %input(type="submit" value="Geocode" onclick="searcher.update()")
-  #searchStatus{:style => "display:inline-block;"}
 =javascript_include_tag 'test'
 
-%br
+#searcher
+  #map
+  %p
+    Type in an address, hit 'geocode', see what happens
+  %input#searchField(type="textbox" value="1410 E Pine St, 98122")
+  %input(type="submit" value="Geocode" onclick="searcher.update()")
+  #searchStatus
 
-%div
-  %input#lat{:type => 'textbox'}
   %br
-  %input#long{:type => 'textbox'}
-  %br
-  %input#address{:type => 'textbox'}
+
+  #searchResults
+    %input#lat{:type => 'textbox'}
+    %input#long{:type => 'textbox'}
+    %input#address{:type => 'textbox'}
