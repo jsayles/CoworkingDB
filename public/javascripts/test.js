@@ -77,7 +77,7 @@ Application.Searcher.prototype._status = function(message) {
   }
 };
 
-Application.Searcher.prototype._clearMarker = function(){
+Application.Searcher.prototype._clearMarker = function() {
   if (this.m_marker) {
     this.m_marker.setMap(null);
     this.m_marker = null;
@@ -88,4 +88,10 @@ var searcher;
 $(document).ready(function() {
   searcher = new Application.Searcher('searchField', 'searchStatus', 'address', 'lat', 'long', application.map);
   searcher.update();
+
+  $("#searchField").keyup(function(event) {
+    if (event.keyCode == 13) {
+      searcher.update();
+    }
+  });
 });
