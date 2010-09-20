@@ -14,7 +14,6 @@ Application.Searcher.prototype.update = function() {
 };
 
 Application.Searcher.prototype._searchAddress = function codeAddress(searchString) {
-  var _this = this;
   if (!Application.Searcher._geocoder) {
     Application.Searcher._geocoder = new google.maps.Geocoder();
   }
@@ -22,22 +21,25 @@ Application.Searcher.prototype._searchAddress = function codeAddress(searchStrin
   Application.Searcher._geocoder.geocode({
     'address': searchString
   },
-  function(results, status) {
-    if (status != google.maps.GeocoderStatus.OK) {
-      _this._error("There was an error from the Google Geocoder:" + status);
-      return;
-    } else if (results.length > 1) {
-      _this._error("Got more than one result. Can you be more specific?");
-      return;
-    }
-    var result = results[0];
-    if (result.geometry.location_type != "ROOFTOP") {
-      _this._error("Couldn't exactly find this space. Could you be more specific?", result.geometry.bounds);
-      return;
-    } else {
-      _this._success(result.geometry.location, result.formatted_address);
-    }
-  });
+  goog.bind(this._geocodeResult, this)
+  );
+};
+
+Application.Searcher.prototype._geocodeResult = function(results, status) {
+  if (status != google.maps.GeocoderStatus.OK) {
+    this._error("There was an error from the Google Geocoder:" + status);
+    return;
+  } else if (results.length > 1) {
+    this._error("Got more than one result. Can you be more specific?");
+    return;
+  }
+  var result = results[0];
+  if (result.geometry.location_type != "ROOFTOP") {
+    this._error("Couldn't exactly find this space. Could you be more specific?", result.geometry.bounds);
+    return;
+  } else {
+    this._success(result.geometry.location, result.formatted_address);
+  }
 };
 
 Application.Searcher.prototype._success = function(location, newAdress) {
