@@ -7,7 +7,7 @@ gem 'haml', '3.0.18'
 gem 'compass', '>= 0.10.5'
 gem 'ruby-debug'
 gem 'acts_as_tree'
-gem 'hassle', :git => 'git://github.com/kevmoo/hassle.git', :ref => '0bf29e'
+gem 'hassle', :git => 'git://github.com/kevmoo/hassle.git', :ref => 'bd0cd41aaceb002c5'
 
 group :development do
   gem 'awesome_print'
