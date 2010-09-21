@@ -1,5 +1,4 @@
-Coworking.Searcher = function(searchFieldSelector, statusSelector, addressFieldSelector, latFieldSelector, longFieldSelector, map) {
-  this.m_inputSelector = searchFieldSelector;
+Coworking.Searcher = function(statusSelector, addressFieldSelector, latFieldSelector, longFieldSelector, map) {
   this.m_latSelector = latFieldSelector;
   this.m_longSelector = longFieldSelector;
   this.m_addressSelector = addressFieldSelector;
@@ -7,8 +6,7 @@ Coworking.Searcher = function(searchFieldSelector, statusSelector, addressFieldS
   this.m_map = map;
 };
 
-Coworking.Searcher.prototype.update = function() {
-  var searchString = $(this.m_inputSelector).val();
+Coworking.Searcher.prototype.update = function(searchString) {
   this._searchAddress(searchString, this._success, this._error);
   this._status("Searching...");
 };

@@ -1,10 +1,6 @@
 Directory::Application.routes.draw do
   resources :places
-  resources :spaces do
-    member do
-      get 'geocode'
-    end
-  end
+  resources :spaces
 
   root :to => "directory#index"
 end

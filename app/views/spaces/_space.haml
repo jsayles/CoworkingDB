@@ -1,3 +1,6 @@
+- content_for :head do
+  =javascript_include_tag 'Coworking.Searcher.js'
+
 = render "shared/error_messages", :target => @space
 = form_for @space do |form|
   %fieldset
@@ -5,6 +8,8 @@
     = form.text_field :name
     = form.label :address
     = form.text_field :address
+    %input#geocode(type="button" value="Geocode")
+    #map
     = form.label :lat
     = form.text_field :lat
     = form.label :long
@@ -21,3 +26,21 @@
 
   %fieldset
     = form.submit
+
+:javascript
+  var searcher;
+  $(document).ready(function() {
+    searcher = new Coworking.Searcher(null, '#space_address', '#space_lat', '#space_long', application.getMap().getGoogMap());
+
+    searcher.update('#{@space.address}');
+
+    $('#geocode').click(function(event){
+      searcher.update($('#space_address').val());
+    });
+
+    $("#searchField").keyup(function(event) {
+      if (event.keyCode == 13) {
+        searcher.update();
+      }
+    });
+  });
