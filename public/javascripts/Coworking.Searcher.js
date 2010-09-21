@@ -85,15 +85,3 @@ Coworking.Searcher.prototype._clearMarker = function() {
     this.m_marker = null;
   }
 };
-
-var searcher;
-$(document).ready(function() {
-  searcher = new Coworking.Searcher('#searchField', '#searchStatus', '#address', '#lat', '#long', application.getMap().getGoogMap());
-  searcher.update();
-
-  $("#searchField").keyup(function(event) {
-    if (event.keyCode == 13) {
-      searcher.update();
-    }
-  });
-});

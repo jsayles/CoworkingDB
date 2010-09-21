@@ -11,6 +11,7 @@
       = javascript_include_tag 'jquery-1.4.1.min.js'
     = javascript_include_tag 'rails', 'Coworking.Map.js', 'Coworking.Application.js'
     = csrf_meta_tag
+    = yield :head
   %body
     .container
       %h1= "CoworkingDB"
