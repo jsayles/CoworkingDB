@@ -45,7 +45,9 @@ Coworking.Application._addScript = function(script_uri) {
 var application;
 $(document).ready(function() {
   application = new Coworking.Application();
-  application.getMap().populateSpaces(viewData.spaceData, true);
+  if (application.getMap()) {
+    application.getMap().populateSpaces(viewData.spaceData, true);
+  }
 });
 
 var viewData = {};
