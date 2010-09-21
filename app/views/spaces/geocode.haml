@@ -5,21 +5,28 @@
   #map
   %p
     Type in an address, hit 'geocode', see what happens
-  %input#searchField(type="textbox" value="1410 E Pine St, 98122")
+  %input#searchField{:type=>"textbox", :value => @space.address }
   %input(type="submit" value="Geocode" onclick="searcher.update()")
   #searchStatus
 
   %br
 
-  #searchResults
-    %input#lat{:type => 'textbox'}
-    %input#long{:type => 'textbox'}
-    %input#address{:type => 'textbox'}
+  = form_for @space do |form|
+    %fieldset
+      = form.label :address
+      = form.text_field :address
+      = form.label :lat
+      = form.text_field :lat
+      = form.label :long
+      = form.text_field :long
+
+    %fieldset
+      = form.submit
 
 :javascript
   var searcher;
   $(document).ready(function() {
-    searcher = new Coworking.Searcher('#searchField', '#searchStatus', '#address', '#lat', '#long', application.getMap().getGoogMap());
+    searcher = new Coworking.Searcher('#searchField', '#searchStatus', '#space_address', '#space_lat', '#space_long', application.getMap().getGoogMap());
     searcher.update();
 
     $("#searchField").keyup(function(event) {

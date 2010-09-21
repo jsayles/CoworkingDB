@@ -6,7 +6,6 @@ class SpacesController < ApplicationController
 
   def new
     @space = Space.new(params[:space])
-
   end
 
   def create
@@ -24,6 +23,10 @@ class SpacesController < ApplicationController
   end
 
   def edit
+    @space = Space.find(params[:id])
+  end
+
+  def geocode
     @space = Space.find(params[:id])
   end
 
