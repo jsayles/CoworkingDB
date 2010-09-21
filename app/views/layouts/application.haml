@@ -2,8 +2,7 @@
 !!! Strict
 %html{html_attrs()}
   %head
-    = stylesheet_link_tag 'http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic'
-    = stylesheet_link_tag 'compiled/screen', :media => 'screen, projection'
+    = stylesheet_link_tag 'compiled/screen'
     = javascript_include_tag "http://maps.google.com/maps/api/js?sensor=false"
     = javascript_include_tag 'http://closure-library.googlecode.com/svn/trunk/closure/goog/base.js'
     - if Rails.env == 'production'
