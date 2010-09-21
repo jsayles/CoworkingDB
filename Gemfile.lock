@@ -1,7 +1,7 @@
 GIT
   remote: git://github.com/kevmoo/hassle.git
-  revision: 30b19d6a32a2913f8b52ed23e68d0ea324b48e18
-  ref: 30b19d6a32a2913f8b52ed23e68d0ea324b48e18
+  revision: 0bf29e48fa4d93ad49de9a33b7211909ce1ec01f
+  ref: 0bf29e
   specs:
     hassle (0.0.1)
       haml
