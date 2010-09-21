@@ -3,10 +3,9 @@
 body
   font-family: Helvetica, Arial, sans-serif
 
-fieldset
-  margin: 20px 0
-  border: solid 1px seagreen
-  background: mediumseagreen
+form fieldset
+  border: none
+  margin: 0
 
   legend
     display: inline-block
@@ -18,6 +17,11 @@ fieldset
     width: 100px
     display: inline-block
     text-align: right
+    vertical-align: top
+    margin-top: 12px
+
+  input[type='text'], textarea
+    width: 500px
 
 #map
   border: 1px solid gray

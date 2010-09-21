@@ -3,30 +3,21 @@
   %fieldset
     = form.label :name
     = form.text_field :name
+    = form.label :address
+    = form.text_field :address
+    = form.label :lat
+    = form.text_field :lat
+    = form.label :long
+    = form.text_field :long
 
   %fieldset
     %legend Details
-    %div
-      = form.label :url, "Website"
-      = form.text_field :url
-    %div
-      = form.label :twitter_url
-      = form.text_field :twitter_url
-    %div
-      = form.label :lat
-      = form.text_field :lat
-    %div
-      = form.label :long
-      = form.text_field :long
-
-  %fieldset
+    = form.label :url, "Website"
+    = form.text_field :url
+    = form.label :twitter_url
+    = form.text_field :twitter_url
     = form.label :description
     = form.text_area :description, :cols => 45, :rows => 10
-
-  %fieldset
-    = form.fields_for :place do |ff|
-      = ff.label :name, "Place Name"
-      = ff.text_field :name
 
   %fieldset
     = form.submit
