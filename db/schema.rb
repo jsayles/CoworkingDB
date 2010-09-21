@@ -10,26 +10,27 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100903165526) do
+ActiveRecord::Schema.define(:version => 20100921003253) do
 
   create_table "places", :force => true do |t|
-    t.string   "name"
-    t.integer  "parent_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string    "name"
+    t.integer   "parent_id"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   create_table "spaces", :force => true do |t|
-    t.integer  "place_id"
-    t.string   "name",         :null => false
-    t.float    "lat"
-    t.float    "long"
-    t.string   "url"
-    t.string   "twitter_url"
-    t.string   "facebook_url"
-    t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer   "place_id"
+    t.string    "name",         :null => false
+    t.float     "lat"
+    t.float     "long"
+    t.string    "url"
+    t.string    "twitter_url"
+    t.string    "facebook_url"
+    t.text      "description"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.string    "address"
   end
 
 end
