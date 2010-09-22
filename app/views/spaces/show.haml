@@ -1,27 +1,31 @@
 %h2= @space.name
-%p= link_to "Edit", edit_space_path(@space)
 
 #map
 
 - if @space.place
-  %ul.lineage
+  %ul#lineage
     %li= link_to @space.place.name, @space.place
     - @space.place.lineage.each do |line|
       %li= link_to line.name, line
 
-%ul
-  - if @space.twitter_url?
-    %li= "Twitter: #{@space.twitter_url}"
+%ul#links
   - if @space.url?
-    %li= raw "Website: #{link_to(@space.url, @space.url)}"
+    %li
+      Website:
+      = link_to @space.url
+  - if @space.twitter_url?
+    %li
+      Twitter:
+      = link_to @space.twitter_url
 
 
 %p.content= simple_format @space.description
 
-%p= link_to "Edit", edit_space_path(@space)
+%ul#crud
+  %li= link_to("Edit", edit_space_path(@space))
+  %li= 'Delete'
 
-
-%p.footer= "last updated #{time_ago_in_words(@space.updated_at)} ago"
+#footer= "last updated #{time_ago_in_words(@space.updated_at)} ago"
 
 
 :javascript

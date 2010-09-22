@@ -3,6 +3,11 @@
 body
   font-family: Helvetica, Arial, sans-serif
 
+#footer
+  margin: 0 auto
+  font-style: italic
+  text-align: center
+
 form fieldset
   border: none
   margin: 0
@@ -75,6 +80,19 @@ ul#navigation
   float: right
   width: 246px
 
+ul#links
+  margin: 10px
+  padding-left: 10px
+
+ul#crud
+  margin: 0 auto
+  text-align: right
+  list-style: none
+
+  li
+    display: inline-block
+    margin-left: 5px
+
 ul
   &.places, &.spaces
     margin-left: 0
@@ -92,9 +110,11 @@ ul
     line-height: 40px
   &.places li a, &.spaces li a
     text-decoration: none
-  &.lineage
-    margin: 0
+
+  &#lineage
+    margin: 10px
     padding: 0
+
     li
       display: inline-block
       padding-right: 10px
