@@ -3,8 +3,8 @@ class CreateSpaces < ActiveRecord::Migration
     create_table :spaces do |t|
       t.integer :place_id
       t.string :name, :null => false
-      t.float :lat
-      t.float :long
+      t.decimal :lat, :precision => 15, :scale => 10
+      t.decimal :long, :precision => 15, :scale => 10
       t.string :url
       t.string :twitter_url
       t.string :facebook_url
