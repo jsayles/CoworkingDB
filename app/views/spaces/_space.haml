@@ -28,19 +28,19 @@
     = form.submit
 
 :javascript
-  var searcher;
-  $(document).ready(function() {
-    searcher = new Coworking.Searcher(null, '#space_address', '#space_lat', '#space_long', application.getMap().getGoogMap());
+  var spaceData = #{@spaces.to_json};
+  var map = new Coworking.Map('map');
 
-    searcher.update('#{@space.address}');
+  var searcher = new Coworking.Searcher(null, '#space_address', '#space_lat', '#space_long', map.getGoogMap());
 
-    $('#geocode').click(function(event){
-      searcher.update($('#space_address').val());
-    });
+  searcher.update('#{@space.address}');
 
-    $("#searchField").keyup(function(event) {
-      if (event.keyCode == 13) {
-        searcher.update();
-      }
-    });
+  $('#geocode').click(function(event){
+    searcher.update($('#space_address').val());
+  });
+
+  $("#searchField").keyup(function(event) {
+    if (event.keyCode == 13) {
+      searcher.update();
+    }
   });

@@ -27,6 +27,7 @@
 
 #footer= "last updated #{time_ago_in_words(@space.updated_at)} ago"
 
-
 :javascript
-  viewData.spaceData = #{[@space].to_json};
+  var spaceData = #{[@space].to_json};
+  var map = new Coworking.Map('map')
+  map.populateSpaces(spaceData, true);

@@ -19,4 +19,6 @@
     %p No places yet.
 
 :javascript
-  viewData.spaceData = #{@spaces.to_json};
+  var spaceData = #{@spaces.to_json};
+  var map = new Coworking.Map('map')
+  map.populateSpaces(spaceData, true);

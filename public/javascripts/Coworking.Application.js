@@ -1,23 +1,14 @@
 goog.provide('Coworking.Application');
 
-goog.require('Coworking.Map');
-
 Coworking.Application = function() {
   if (document.getElementById('footnotes_debug')) {
     Coworking.Application._initFootnotes();
-  }
-  if (document.getElementById('map')) {
-    this.m_map = new Coworking.Map('map');
   }
 
   var doStats = doStats || false;
   if (doStats) {
     Coworking.Application._addStats();
   }
-};
-
-Coworking.Application.prototype.getMap = function() {
-  return this.m_map;
 };
 
 Coworking.Application._initFootnotes = function() {
@@ -42,12 +33,6 @@ Coworking.Application._addScript = function(script_uri) {
   s.parentNode.insertBefore(script, s);
 };
 
-var application;
 $(document).ready(function() {
-  application = new Coworking.Application();
-  if (application.getMap()) {
-    application.getMap().populateSpaces(viewData.spaceData, true);
-  }
+  new Coworking.Application();
 });
-
-var viewData = {};
