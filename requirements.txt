@@ -1,3 +1,0 @@
-django>=3.0
-psycopg2==2.8.4
-pip-review

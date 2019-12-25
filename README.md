@@ -5,10 +5,6 @@
    The primary objective of this project is to create a simple,
 neutral, extensible database for coworking spaces around the world.
 
-## Authors
-
-- [Jacob Sayles](https://kanawha.design/jacobsayles)
-
 ## Logo & Favicon
 Image by [xwoodhillx](https://thenounproject.com/grzl/) from the Noun Project
 
