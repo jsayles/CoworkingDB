@@ -1,4 +1,0 @@
-%li= link_to(place.name_with_space_count, place)
-- if place.children.any?
-  %ul
-    = render :partial => 'places/place', :collection => place.children

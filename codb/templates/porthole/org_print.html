@@ -1,0 +1,91 @@
+<html>
+
+<head>
+  <style>
+    table { margin-left: 20px; }
+    th { text-align:left; padding-right:1em;}
+    li { margin=left: 20px; }
+  </style>
+</head>
+
+<body>
+<h1>Organization: {{ org.name }}</h1>
+
+{% if org.location_set.all %}
+  <h2>Rooms</h2>
+  <ul>
+  {% for l in org.location_set.all %}
+    <li>{{ l.number }}: {{ l.name }}</li>
+  {% endfor %}
+  </ul>
+{% endif %}
+
+<h2>Network Details</h2>
+<table>
+
+{% if org.wifi_network %}
+  <tr>
+    <th>WIFI:</th>
+    <td>{{ org.wifi_network }}</td>
+  </tr>
+  <tr>
+    <th>Password:</th>
+    <td>{{ org.wifi_password }}</td>
+  </tr>
+{% endif %}
+
+{% if vlan %}
+  <tr>
+    <th>VLAN:</th>
+    <td>{{ vlan.tag }}</td>
+  </tr>
+
+  {% if vlan.ip_range %}
+    <tr>
+      <th>Network:</th>
+      <td>{{ vlan.ip_range }}</td>
+    </tr>
+  {% endif %}
+
+  {% if vlan.gateway %}
+    <tr>
+      <th>Gateway:</th>
+      <td>{{ vlan.gateway }}</td>
+    </tr>
+  {% endif %}
+
+  {% if vlan.netmask %}
+    <tr>
+      <th>Netmask:</th>
+      <td>{{ vlan.netmask }}</td>
+    </tr>
+  {% endif %}
+
+  {% if vlan.dns %}
+    <tr>
+      <th>DNS:</th>
+      <td>{{ vlan.dns }}</td>
+    </tr>
+  {% endif %}
+
+  {% if vlan.dhcp_range %}
+    <tr>
+      <th>DHCP:</th>
+      <td>{{ vlan.dhcp_range }}</td>
+    </tr>
+  {% endif %}
+{% endif %}
+
+{% if org.ports %}
+  <tr>
+    <th>Ports ({{ org.ports | length }})</th>
+    <td>
+      [ {% for p in org.ports %}
+        {{ p }},
+      {% endfor %} ]
+    </td>
+  </tr>
+{% endif %}
+
+</body>
+</html>
