@@ -6,7 +6,7 @@ from codb import views
 app_name = 'codb'
 urlpatterns = [
     path('', views.home, name='home'),
-    # path('search/', views.search, name='search'),
+    path('search/', views.search, name='search'),
     # path('port/<int:port_id>/', views.port_view, name='port'),
     # path('locations/', views.location_list, name='locations'),
     # path('location/<str:location>/', views.location_view, name='location'),

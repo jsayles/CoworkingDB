@@ -14,6 +14,13 @@ from django.shortcuts import get_object_or_404, render
 def home(request):
     context = {}
     return render(request, 'codb/home.html', context)
+
+@staff_member_required
+def search(request):
+    context = {
+    }
+    return render(request, 'codb/search.html', context)
+
 #
 # @staff_member_required
 # def search(request):
