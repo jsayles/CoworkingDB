@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404, render
 
-# from codb.models import Organization, Location, SwitchStack, Switch, VLAN, Port
+# from coredb.models import Organization, Location, SwitchStack, Switch, VLAN, Port
 
 
 #########################################################################
@@ -13,13 +13,13 @@ from django.shortcuts import get_object_or_404, render
 
 def home(request):
     context = {}
-    return render(request, 'codb/home.html', context)
+    return render(request, 'coredb/home.html', context)
 
 @staff_member_required
 def search(request):
     context = {
     }
-    return render(request, 'codb/search.html', context)
+    return render(request, 'coredb/search.html', context)
 
 #
 # @staff_member_required
@@ -55,7 +55,7 @@ def search(request):
 #         'q_closet': closet_number,
 #         'q_label': port_label,
 #     }
-#     return render(request, 'codb/search.html', context)
+#     return render(request, 'coredb/search.html', context)
 #
 # @staff_member_required
 # def port_view(request, port_id):
@@ -63,7 +63,7 @@ def search(request):
 #     context = {
 #         'port': port,
 #     }
-#     return render(request, 'codb/port_view.html', context)
+#     return render(request, 'coredb/port_view.html', context)
 #
 # #########################################################################
 # # Location Views
@@ -79,7 +79,7 @@ def search(request):
 #     context = {
 #         'locations': locations,
 #     }
-#     return render(request, 'codb/location_list.html', context)
+#     return render(request, 'coredb/location_list.html', context)
 #
 # @staff_member_required
 # def location_view(request, location):
@@ -91,7 +91,7 @@ def search(request):
 #         'order_by': order_by,
 #         'ports': ports,
 #     }
-#     return render(request, 'codb/location_view.html', context)
+#     return render(request, 'coredb/location_view.html', context)
 #
 # #########################################################################
 # # Switch Views
@@ -104,7 +104,7 @@ def search(request):
 #     context = {
 #         'closets': closets
 #     }
-#     return render(request, 'codb/switch_list.html', context)
+#     return render(request, 'coredb/switch_list.html', context)
 #
 # @staff_member_required
 # def switch_view(request, stack, unit):
@@ -116,7 +116,7 @@ def search(request):
 #         'order_by': order_by,
 #         'ports': ports,
 #     }
-#     return render(request, 'codb/switch_view.html', context)
+#     return render(request, 'coredb/switch_view.html', context)
 #
 # #########################################################################
 # # VLAN Views
@@ -128,7 +128,7 @@ def search(request):
 #     context = {
 #         'vlans': vlans,
 #     }
-#     return render(request, 'codb/vlan_list.html', context)
+#     return render(request, 'coredb/vlan_list.html', context)
 #
 # @staff_member_required
 # def vlan_view(request, vlan):
@@ -140,7 +140,7 @@ def search(request):
 #         'order_by': order_by,
 #         'ports': ports,
 #     }
-#     return render(request, 'codb/vlan_view.html', context)
+#     return render(request, 'coredb/vlan_view.html', context)
 #
 # #########################################################################
 # # Org Views
@@ -152,7 +152,7 @@ def search(request):
 #     context = {
 #         'orgs': orgs,
 #     }
-#     return render(request, 'codb/org_list.html', context)
+#     return render(request, 'coredb/org_list.html', context)
 #
 #
 # @staff_member_required
@@ -163,7 +163,7 @@ def search(request):
 #         'org': org,
 #         'ports': ports,
 #     }
-#     return render(request, 'codb/org_view.html', context)
+#     return render(request, 'coredb/org_view.html', context)
 #
 # @staff_member_required
 # def org_print(request, org_id):
@@ -172,4 +172,4 @@ def search(request):
 #         'org': org,
 #         'vlan': org.vlan,
 #     }
-#     return render(request, 'codb/org_print.html', context)
+#     return render(request, 'coredb/org_print.html', context)

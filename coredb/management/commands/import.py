@@ -1,8 +1,8 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 
-from codb.models import Location, Switch, VLAN, Port
-from codb.importer import Importer
+from coredb.models import Location, Switch, VLAN, Port
+from coredb.importer import Importer
 
 class Command(BaseCommand):
     help = "Import an Excel file"

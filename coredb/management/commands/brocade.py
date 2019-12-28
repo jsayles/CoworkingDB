@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 
-from codb import models, brocade
+from coredb import models, brocade
 
 
 class Command(BaseCommand):

@@ -1,4 +1,4 @@
-{% extends "codb/base.html" %}
+{% extends "coredb/base.html" %}
 {% load static %}
 
 {% block content %}
@@ -35,7 +35,7 @@
 
       {% if ports %}
         <h5>Ports ({{ ports | length }})</h5>
-        {% include 'codb/port_table.html' %}
+        {% include 'coredb/port_table.html' %}
       {% endif %}
     </div>
   </div>

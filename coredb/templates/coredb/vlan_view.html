@@ -1,4 +1,4 @@
-{% extends "codb/base.html" %}
+{% extends "coredb/base.html" %}
 {% load static %}
 
 {% block content %}
@@ -19,7 +19,7 @@
         <b>Range:</b>  {{ vlan.ip_range }}
         <b>Ports:</b> {{ ports | length }}
       </h6>
-      {% include 'codb/port_table.html' %}
+      {% include 'coredb/port_table.html' %}
     </div>
   </div>
 </div>

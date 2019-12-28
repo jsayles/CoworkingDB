@@ -143,7 +143,7 @@ class Company(models.Model):
     #     return reverse('vlan', kwargs={'vlan': self.tag})
     #
     # def get_admin_url(self):
-    #     return reverse('admin:codb_vlan_change', args=[self.id])
+    #     return reverse('admin:coredb_vlan_change', args=[self.id])
 
     class Meta:
         ordering = ['name',]

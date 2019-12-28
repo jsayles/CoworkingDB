@@ -3,7 +3,7 @@ from openpyxl import Workbook, load_workbook
 from django.conf import settings
 from django.utils.timezone import localtime, now
 
-from codb.models import Location, SwitchStack, Switch, VLAN, Port
+from coredb.models import Location, SwitchStack, Switch, VLAN, Port
 
 
 LOCATIONS = "Locations"

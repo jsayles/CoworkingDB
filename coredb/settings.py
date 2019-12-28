@@ -25,10 +25,10 @@ BASE_URL = "https://example.com"
 
 # Application definition
 
-AUTH_USER_MODEL = 'codb.Person'
+AUTH_USER_MODEL = 'coredb.Person'
 
 INSTALLED_APPS = [
-    'codb',
+    'coredb',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -48,7 +48,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'codb.urls'
+ROOT_URLCONF = 'coredb.urls'
 
 TEMPLATES = [
     {
@@ -66,7 +66,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'codb.wsgi.application'
+WSGI_APPLICATION = 'coredb.wsgi.application'
 
 
 # Database

@@ -95,7 +95,7 @@ class Migration(migrations.Migration):
                 ('end_day', models.PositiveSmallIntegerField(blank=True, null=True)),
                 ('end_month', models.PositiveSmallIntegerField(blank=True, null=True)),
                 ('end_year', models.PositiveSmallIntegerField(blank=True, null=True)),
-                ('company', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='codb.Company')),
+                ('company', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='coredb.Company')),
                 ('person', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
@@ -116,7 +116,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='company',
             name='location',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='codb.Location'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='coredb.Location'),
         ),
         migrations.AddField(
             model_name='company',
@@ -126,12 +126,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='company',
             name='websites',
-            field=models.ManyToManyField(blank=True, to='codb.Website'),
+            field=models.ManyToManyField(blank=True, to='coredb.Website'),
         ),
         migrations.AddField(
             model_name='person',
             name='location',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='codb.Location'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='coredb.Location'),
         ),
         migrations.AddField(
             model_name='person',
@@ -141,6 +141,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='person',
             name='websites',
-            field=models.ManyToManyField(blank=True, to='codb.Website'),
+            field=models.ManyToManyField(blank=True, to='coredb.Website'),
         ),
     ]

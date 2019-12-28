@@ -1,8 +1,8 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 
-from codb.models import Location, Switch, VLAN, Port
-from codb.importer import Exporter
+from coredb.models import Location, Switch, VLAN, Port
+from coredb.importer import Exporter
 
 class Command(BaseCommand):
     help = "Export an Excel file"

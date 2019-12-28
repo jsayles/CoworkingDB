@@ -1,4 +1,4 @@
-{% extends "codb/base.html" %}
+{% extends "coredb/base.html" %}
 {% load static %}
 
 {% block content %}
@@ -18,7 +18,7 @@
         <b>Floor:</b> {{ location.floor }}
         <b>Ports:</b> {{ ports.count }}
       </h6>
-      {% include 'codb/port_table.html' %}
+      {% include 'coredb/port_table.html' %}
     </div>
   </div>
 </div>
