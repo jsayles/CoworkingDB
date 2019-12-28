@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse
 from django.db.models import Count
+from django.contrib.auth.models import AbstractUser
 
 
 GENDER_CHOICES = (
@@ -12,78 +13,47 @@ GENDER_CHOICES = (
 )
 
 
-class RelationshipType(models.Model):
-    name = models.CharField(max_length=128, unique=True)
-
-    def __str__(self): return self.name
-
-
-class Relationship(models.Model):
-    relationship_type = models.ForeignKey(RelationshipType, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    # TODO - Add start and end dates
-
-
-class URLType(models.Model):
-    name = models.CharField(max_length=128, unique=True)
-
-    def __str__(self): return self.name
-
-    class Meta:
-        ordering = ['name']
-
-
 class Website(models.Model):
-    url_type = models.ForeignKey(URLType, on_delete=models.CASCADE)
+    GITHUB = "github"
+    LINKEDIN = "linkedin"
+    PERSONAL = "personal"
+    FACEBOOK = "facebook"
+    INSTAGRAM = "instagram"
+    BLOG = "blog"
+    OTHER = "other"
+
+    SITE_TYPES = (
+        (GITHUB, "github"),
+        (LINKEDIN, "linkedin"),
+        (PERSONAL, "personal"),
+        (FACEBOOK, "facebook"),
+        (INSTAGRAM, "instagram"),
+        (BLOG, "blog"),
+        (OTHER, "other"),
+    )
+
+    # Model definitions
+    type = models.CharField(max_length=16, choices=SITE_TYPES, default=OTHER)
     url = models.URLField()
 
     def __str__(self):
         return self.url
 
 
-class Space(models.Model):
-    name = models.CharField(max_length=32)
-    description = models.TextField(null=True, blank=True)
+class Location(models.Model):
+    address1 = models.CharField(max_length=128, blank=True)
+    address2 = models.CharField(max_length=128, blank=True)
+    city = models.CharField(max_length=128, blank=True)
+    state = models.CharField(max_length=2, blank=True)
+    zipcode = models.CharField(max_length=16, blank=True)
+    country = models.CharField(max_length=128, blank=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
-    address1 = models.CharField(max_length=128, blank=True)
-    address2 = models.CharField(max_length=128, blank=True)
-    city = models.CharField(max_length=128, blank=True)
-    state = models.CharField(max_length=2, blank=True)
-    zipcode = models.CharField(max_length=16, blank=True)
-    country = models.CharField(max_length=128, blank=True)
+
+
+class Person(AbstractUser):
     phone = models.CharField(max_length=16, blank=True, null=True)
-    relationships = models.ManyToManyField(Relationship, blank=True)
-    websites = models.ManyToManyField(Website, blank=True)
-    email = models.EmailField(max_length=100, unique=True)
-    created_ts = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="created_by", on_delete=models.CASCADE)
-    updated_ts = models.DateTimeField(auto_now=True)
-    updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="updated_by", on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
-
-    # def get_absolute_url(self):
-    #     return reverse('vlan', kwargs={'vlan': self.tag})
-    #
-    # def get_admin_url(self):
-    #     return reverse('admin:codb_vlan_change', args=[self.id])
-
-    class Meta:
-        ordering = ['name',]
-
-
-class UserProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, blank=False, related_name="profile", on_delete=models.CASCADE)
-    phone = models.CharField(max_length=16, blank=True, null=True)
-    address1 = models.CharField(max_length=128, blank=True)
-    address2 = models.CharField(max_length=128, blank=True)
-    city = models.CharField(max_length=128, blank=True)
-    state = models.CharField(max_length=2, blank=True)
-    zipcode = models.CharField(max_length=16, blank=True)
-    country = models.CharField(max_length=128, blank=True)
-    bio = models.TextField(blank=True, null=True)
+    location = models.ForeignKey(Location, blank=True, null=True, on_delete=models.SET_NULL)
     websites = models.ManyToManyField(Website, blank=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default="U")
     pronouns = models.CharField(max_length=64, blank=True, null=True)
@@ -138,3 +108,73 @@ class EmailAddress(models.Model):
                 raise Exception("Can not delete last email address!")
             next_email.set_primary()
         super(EmailAddress, self).delete()
+
+
+class Company(models.Model):
+    SPACE = "space"
+    VENDOR = "vendor"
+    CONSULT = "consult"
+    OTHER = "other"
+
+    COMPANY_TYPES = (
+        (SPACE, "Coworking Space"),
+        (VENDOR, "Product Vendor"),
+        (CONSULT, "Consultantancy"),
+        (OTHER, "Other"),
+    )
+
+    # Model definitions
+    name = models.CharField(max_length=32)
+    type = models.CharField(max_length=16, choices=COMPANY_TYPES, default=OTHER)
+    description = models.TextField(null=True, blank=True)
+    phone = models.CharField(max_length=16, blank=True, null=True)
+    websites = models.ManyToManyField(Website, blank=True)
+    email = models.EmailField(max_length=100, unique=True)
+    location = models.ForeignKey(Location, null=True, on_delete=models.SET_NULL)
+    created_ts = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="created_by", on_delete=models.CASCADE)
+    updated_ts = models.DateTimeField(auto_now=True)
+    updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="updated_by", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+    # def get_absolute_url(self):
+    #     return reverse('vlan', kwargs={'vlan': self.tag})
+    #
+    # def get_admin_url(self):
+    #     return reverse('admin:codb_vlan_change', args=[self.id])
+
+    class Meta:
+        ordering = ['name',]
+
+
+class Relationship(models.Model):
+    FOUNDER = "founder"
+    OWNER = "owner"
+    EMPLOYEE = "employee"
+    VOLUNTEER = "volunteer"
+    VENDOR = "vendor"
+    CONSULT = "consultant"
+    OTHER = "other"
+
+    RELATIONSHIP_TYPES = (
+        (FOUNDER, "Founder"),
+        (OWNER, "Owner"),
+        (EMPLOYEE, "Employee"),
+        (VOLUNTEER, "Volunteer"),
+        (VENDOR, "Product Vendor"),
+        (CONSULT, "Consultant"),
+        (OTHER, "Other"),
+    )
+
+    # Model definitions
+    type = models.CharField(max_length=16, choices=RELATIONSHIP_TYPES, default=OTHER)
+    person = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    start_day = models.PositiveSmallIntegerField(blank=True, null=True)
+    start_month = models.PositiveSmallIntegerField(blank=True, null=True)
+    start_year = models.PositiveSmallIntegerField(blank=True, null=True)
+    end_day = models.PositiveSmallIntegerField(blank=True, null=True)
+    end_month = models.PositiveSmallIntegerField(blank=True, null=True)
+    end_year = models.PositiveSmallIntegerField(blank=True, null=True)
