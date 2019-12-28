@@ -7,7 +7,7 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
 
-    <title>Coworking Database</title>
+    <title>CO &middot; RE &middot; DB | Coworking Relationship Database</title>
 
     <!-- Icons -->
     <link rel="shortcut icon" href="{%  static 'img/favicon.ico' %}">
@@ -33,15 +33,22 @@
       <nav class="indigo"  role="navigation">
         <div class="nav-wrapper container">
           <a id="logo-container" href="/" class="brand-logo">
-            <i class="material-icons">near_me</i>Coworking Database
+            <i class="large material-icons">people</i>
+            <i class="large material-icons">compare_arrows</i>
+            <i class="large material-icons">business</i>
+            Coworking Relationship Database
           </a>
           <ul class="right hide-on-med-and-down">
             <li><a href="">People</a></li>
             <li><a href="">Spaces</a></li>
+            <li><a href="">Vendors</a></li>
+            <li><a href="">Consultants</a></li>
             <li>
               <a href="{% url 'search' %}"><i class="material-icons">search</i></a>
             </li>
-            <li><a href="{% url 'admin:index' %}">Admin</a></li>
+            {% if request.user.is_staff %}
+              <li><a href="{% url 'admin:index' %}">Admin</a></li>
+            {% endif %}
           </ul>
         </div>
       </nav>
