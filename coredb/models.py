@@ -2,7 +2,9 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse
 from django.db.models import Count
-from django.contrib.auth.models import AbstractUser
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from django.contrib.auth.models import UserManager, AbstractUser
 
 
 GENDER_CHOICES = (
@@ -14,6 +16,7 @@ GENDER_CHOICES = (
 
 
 class Website(models.Model):
+
     GITHUB = "github"
     LINKEDIN = "linkedin"
     PERSONAL = "personal"
@@ -51,16 +54,63 @@ class Location(models.Model):
     longitude = models.FloatField(null=True, blank=True)
 
 
+class PersonManager(UserManager):
+
+    def by_email(self, email):
+        """Retrieve a Person based who has the given email address."""
+        email_address = EmailAddress.objects.filter(email=email).first() # There should be only one
+        if email_address:
+            return email_address.person
+
+    def founders(self):
+        """Return a QuerySet of all Persons with a Relationship of FOUNDER."""
+        pass
+
+
 class Person(AbstractUser):
-    phone = models.CharField(max_length=16, blank=True, null=True)
-    location = models.ForeignKey(Location, blank=True, null=True, on_delete=models.SET_NULL)
-    websites = models.ManyToManyField(Website, blank=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default="U")
     pronouns = models.CharField(max_length=64, blank=True, null=True)
+    websites = models.ManyToManyField(Website, blank=True)
+    location = models.ForeignKey(Location, blank=True, null=True, on_delete=models.SET_NULL)
+    phone = models.CharField(max_length=16, blank=True, null=True)
+
+    objects = PersonManager()
+
+    def add_email(self, email, primary=False):
+        email_address = EmailAddress.objects.filter(person=self, email=email)
+        if not email_address:
+            email_address = EmailAddress.objects.create(person=self, email=email)
+        if primary:
+            # Update the Person model
+            self.email = email
+            self.save()
+            # Update the EmailAddress model
+            email_address.is_primary = True
+            email_address.save()
+
+
+@receiver(post_save, sender=Person)
+def person_post_save(**kwargs):
+    """Make sure Person.email is also an EmailAddress."""
+    person = kwargs['instance']
+    if person.email:
+        email_address = person.emails.filter(email=person.email).first() # there should be only one
+        if not email_address:
+            # Email was not in there so it should be created
+            EmailAddress.objects.create(person=person, email=person.email, is_primary=True)
+        elif not email_address.is_primary:
+            # Email was in there indicating this is being switched to primary
+            # Make the old primary not primary anymore
+            old_primary = person.emails.filter(is_primary=True).first() # There should be only one
+            if old_primary:
+                old_primary.is_primary = False
+                old_primary.save()
+            email_address.is_primary = True
+            email_address.save()
 
 
 class EmailAddress(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    person = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="emails", on_delete=models.CASCADE)
     email = models.EmailField(max_length=100, unique=True)
     created_ts = models.DateTimeField(auto_now_add=True)
     verif_key = models.CharField(max_length=40)
@@ -74,24 +124,24 @@ class EmailAddress(models.Model):
 
     def is_verified(self):
         """Is this e-mail address verified? Verification is indicated by
-        existence of a verified timestamp which is the time the user
+        existence of a verified timestamp which is the time the person
         followed the e-mail verification link."""
         return bool(self.verified_ts)
 
     def set_primary(self):
         """Set this e-mail address to the primary address by setting the
-        email property on the user."""
+        email property on the person."""
         # If we are already primary, we're done
         if self.is_primary:
             return
 
-        # Make sure the user has the same email address
-        if self.user.email != self.email:
-            self.user.email = self.email
-            self.user.save()
+        # Make sure the person has the same email address
+        if self.person.email != self.email:
+            self.person.email = self.email
+            self.person.save()
 
         # Now go through and unset all other email addresses
-        for email in self.user.emailaddress_set.all():
+        for email in self.person.emails.all():
             if email == self:
                 email.is_primary = True
                 email.save(verify=False)
@@ -103,7 +153,7 @@ class EmailAddress(models.Model):
     def delete(self):
         """Delete this EmailAddress object."""
         if self.is_primary:
-            next_email = self.user.emailaddress_set.exclude(email=self.email).first()
+            next_email = self.person.emails.exclude(email=self.email).first()
             if not next_email:
                 raise Exception("Can not delete last email address!")
             next_email.set_primary()
@@ -150,6 +200,7 @@ class Company(models.Model):
 
 
 class Relationship(models.Model):
+
     FOUNDER = "founder"
     OWNER = "owner"
     EMPLOYEE = "employee"
