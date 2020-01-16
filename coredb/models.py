@@ -1,3 +1,10 @@
+import sys
+import logging
+import random
+import hashlib
+
+from datetime import datetime, time, date, timedelta
+
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
@@ -5,6 +12,8 @@ from django.db.models import Count
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.contrib.auth.models import UserManager, AbstractUser
+
+logger = logging.getLogger(__name__)
 
 
 GENDER_CHOICES = (
@@ -167,6 +176,49 @@ class EmailAddress(models.Model):
                 if email.is_primary:
                     email.is_primary = False
                     email.save(verify=False)
+
+    def generate_verif_key(self):
+        random.seed(datetime.now())
+        salt = random.randint(0, sys.maxsize)
+        salted_email = "%s%s" % (salt, self.email)
+        self.verif_key = hashlib.sha1(salted_email.encode('utf-8')).hexdigest()
+        self.save()
+
+    def get_verif_key(self):
+        if not self.verif_key:
+            self.generate_verif_key()
+        return self.verif_key
+
+    def get_verify_link(self):
+        verify_link = settings.EMAIL_VERIFICATION_URL
+        if not verify_link:
+            verif_key = self.get_verif_key()
+            uri = reverse('email_verify', kwargs={'email_pk': self.id}) + "?verif_key=" + verif_key
+            verify_link = settings.SITE_PROTO + "://" + settings.SITE_DOMAIN + uri
+        return verify_link
+
+    def get_send_verif_link(self):
+        return reverse('email_verify', kwargs={'email_pk': self.id}) + "?send_link=True"
+
+    def get_set_primary_link(self):
+        return reverse('email_manage', kwargs={'email_pk': self.id, 'action':'set_primary'})
+
+    def get_delete_link(self):
+        return reverse('email_manage', kwargs={'email_pk': self.id, 'action':'delete'})
+
+    def save(self, verify=True, *args, **kwargs):
+        """Save this EmailAddress object."""
+        if not self.verif_key:
+            self.generate_verif_key()
+        if verify and not self.pk:
+            # Skip verification if this is an update
+            verify = True
+        else:
+            verify = False
+        super(EmailAddress, self).save(*args, **kwargs)
+        # TODO - Send verification email!
+        # if verify:
+        #     email.send_verification(self)
 
     def delete(self):
         """Delete this EmailAddress object."""

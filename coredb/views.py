@@ -4,11 +4,11 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponse, HttpResponseRedirect
 
-from coredb.models import Person, Company, Relationship
+from coredb.models import Person, Company, Relationship, EmailAddress
 
 logger = logging.getLogger(__name__)
 
@@ -181,7 +181,7 @@ def email_manage(request, email_pk, action):
     """Set the requested email address as the primary. Can only be
     requested by the owner of the email address."""
     email_address = get_object_or_404(EmailAddress, pk=email_pk)
-    if not email_address.user == request.user and not request.user.is_staff:
+    if not email_address.person == request.user and not request.user.is_staff:
         messages.error(request, "You are not authorized to manage this email address")
     # if not email_address.is_verified():
     #     messages.error(request, "Email '%s' needs to be verified first." % email_address.email)
@@ -196,32 +196,31 @@ def email_manage(request, email_pk, action):
     if 'HTTP_REFERER' in request.META:
         return redirect(request.META['HTTP_REFERER'])
     else:
-        return redirect(reverse('member:profile:view', kwargs={'username': email_address.user.username}))
+        return HttpResponseRedirect(email_address.person.get_absolute_url())
 
 
 @login_required
 def email_add(request):
-    user = get_object_or_404(User, username=request.POST.get("username"))
+    person = get_object_or_404(Person, username=request.POST.get("username"))
     email = request.POST.get("email")
     if email:
-        e = EmailAddress(user=user, email=email.lower())
+        e = EmailAddress(person=person, email=email.lower())
         e.save(verify=True)
     if 'HTTP_REFERER' in request.META:
         return redirect(request.META['HTTP_REFERER'])
     else:
-        return redirect(reverse('member:profile:view', kwargs={'username': email_address.user.username}))
+        return HttpResponseRedirect(email_address.person.get_absolute_url())
 
 
 @login_required
 def email_delete(request, email_pk):
     """Delete the given email. Must be owned by current user."""
     email = get_object_or_404(EmailAddress, pk=int(email_pk))
-    if email.user == request.user:
+    if email.person == request.user:
         if not email.is_verified():
             email.delete()
         else:
-            num_verified_emails = len(request.user.emailaddress_set.filter(
-                verified_at__isnull=False))
+            num_verified_emails = len(request.user.emails.all.filter(verified_at__isnull=False))
             if num_verified_emails > 1:
                 email.delete()
             elif num_verified_emails == 1:
@@ -241,7 +240,7 @@ def email_verify(request, email_pk):
     email_address = get_object_or_404(EmailAddress, pk=email_pk)
     if email_address.is_verified():
         messages.error(request, "Email address was already verified.")
-    if not email_address.user == request.user and not request.user.is_staff:
+    if not email_address.person == request.user and not request.user.is_staff:
         messages.error(request, "You are not authorized to verify this email address")
 
     # Send the verification link if that was requested
@@ -257,7 +256,7 @@ def email_verify(request, email_pk):
             email_address.verified_ts = timezone.now()
             email_address.save()
             messages.success(request, "Email address has been verified.")
-            return HttpResponseRedirect(reverse('member:profile:view', kwargs={'username': email_address.user.username}))
+            return HttpResponseRedirect(email_address.person.get_absolute_url())
         else:
             messages.error(request, "Invalid Key")
 

@@ -1,47 +1,15 @@
 {% extends "coredb/base.html" %}
-{% load email_tags %}
 {% load static %}
 
-{% block style %}
-    .help_text {
-        background:white;
-        padding: 1em;
-        display: none;
-    }
-
-    @media only screen and (max-width: 1100px) {
-      .row .col.offset-s1.s10 {
-    		margin-left: 0;
-    	}
-
-  		.row .col.s10 {
-  			width: 100%;
-  		}
-  	}
-{% endblock %}
-
 {% block content %}
-{% block reg_edit %}
-<h3 class='header-font centered'>Edit Your Profile</h3>
+<div class="container">
+  <div class="section">
+    <div class="row center">
+      <h4 class="center">Edit Your Profile</h4>
+
 
 <div id="profile_form">
-  <h3>
-      Email Addresses
-      (<a onclick="$('#email_help').toggle();">?</a>)
-  </h3>
-  <table id="emails">
-    <tr id="email_help" class="help_text">
-      <td colspan="2">
-        <strong>Email Help</strong>
-        <p>You can have multiple email addresses associated with your membership.
-        These emails are used at login, and when messages are sent to various mailing
-        lists.  If you send email from an address that is not associated with a
-        membership, it will be moderated.</p>
-        <p>Your primary email address is the address we send notifications and
-        mailing list messages to.</p>
-      </td>
-    </tr>
-  </table>
+  <h5 style='text-align:left;'>Email Addresses</h5>
   <table id='email-table'>
     {% for email in person.emails.all %}
     <tr>
@@ -79,7 +47,7 @@
   </table>
 
   <form name='edit' enctype="multipart/form-data" action='.' method='POST' autocomplete="off">
-    <h3>Change Password</h3>
+    <h5 style='text-align:left;'>Account Password</h3>
     <div style='text-align:left;' id='passwords'>
       <table>
         <tr>
@@ -94,7 +62,7 @@
     </div>
 
     {{ profile_form.username }}
-    <h3 style='text-align:left;'>Contact Information</h3>
+    <h5 style='text-align:left;'>Contact Information</h5>
     <div id='contact'>
       <table>
         <tr>
@@ -110,7 +78,6 @@
           <td class='pf-error'>{{ profile_form.last_name.errors }}</td>
         </tr>
       </table>
-{% endblock %} <!-- reg_edit -->
 
       <table>
         <tr>
@@ -129,8 +96,8 @@
       <table>
         <tr>
           <td class='cap-label'>City</td>
-          <td class='cap-label'>State</td>
-          <td class='cap-label'>Zipcode</td>
+          <td class='cap-label'>State/Province</td>
+          <td class='cap-label'>Zipcode/Postal Code</td>
         </tr>
         <tr>
           <td class='pf-input'>{{ profile_form.city }}</td>
@@ -159,7 +126,7 @@
       </table>
     </div>
 
-    <h3 style='text-align:left;'>Profile Information</h3>
+    <h5 style='text-align:left;'>Profile Information</h5>
     <div id='websites'>
       <table>
         <tr>
@@ -306,6 +273,10 @@
     <button class="btn waves-effect waves-light sub-btn" type="submit" value="Update Your Profile" />Update Your Profile</button>
     {% csrf_token %}
   </form>
+</div>
+
+    </div>
+  </div>
 </div>
 {% endblock %}
 
