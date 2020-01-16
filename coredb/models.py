@@ -64,15 +64,27 @@ class PersonManager(UserManager):
 
     def founders(self):
         """Return a QuerySet of all Persons with a Relationship of FOUNDER."""
-        pass
+        founder_qs = Relationship.objects.filter(type=Relationship.FOUNDER)
+        return Person.objects.filter(id__in=founder_qs.values("person"))
+
+    def vendors(self):
+        """Return a QuerySet of all Persons with a Relationship of VENDOR."""
+        vendor_qs = Relationship.objects.filter(type=Relationship.VENDOR)
+        return Person.objects.filter(id__in=vendor_qs.values("person"))
+
+    def consultants(self):
+        """Return a QuerySet of all Persons with a Relationship of CONSULT."""
+        consult_qs = Relationship.objects.filter(type=Relationship.CONSULT)
+        return Person.objects.filter(id__in=consult_qs.values("person"))
+
 
 
 class Person(AbstractUser):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default="U")
-    pronouns = models.CharField(max_length=64, blank=True, null=True)
+    pronouns = models.CharField(max_length=64, blank=True)
     websites = models.ManyToManyField(Website, blank=True)
-    location = models.ForeignKey(Location, blank=True, null=True, on_delete=models.SET_NULL)
-    phone = models.CharField(max_length=16, blank=True, null=True)
+    location = models.ForeignKey(Location, null=True, on_delete=models.SET_NULL)
+    phone = models.CharField(max_length=16, blank=True)
 
     objects = PersonManager()
 
@@ -114,9 +126,9 @@ class EmailAddress(models.Model):
     email = models.EmailField(max_length=100, unique=True)
     created_ts = models.DateTimeField(auto_now_add=True)
     verif_key = models.CharField(max_length=40)
-    verified_ts = models.DateTimeField(default=None, null=True, blank=True)
-    remote_addr = models.GenericIPAddressField(null=True, blank=True)
-    remote_host = models.CharField(max_length=255, null=True, blank=True)
+    verified_ts = models.DateTimeField(default=None, blank=True, null=True)
+    remote_addr = models.GenericIPAddressField(blank=True, null=True)
+    remote_host = models.CharField(max_length=255, blank=True)
     is_primary = models.BooleanField(default=False)
 
     def __str__(self):
@@ -175,11 +187,12 @@ class Company(models.Model):
 
     # Model definitions
     name = models.CharField(max_length=32)
+    code = models.CharField(max_length=32, unique=True)
     type = models.CharField(max_length=16, choices=COMPANY_TYPES, default=OTHER)
-    description = models.TextField(null=True, blank=True)
-    phone = models.CharField(max_length=16, blank=True, null=True)
+    description = models.TextField(blank=True)
+    phone = models.CharField(max_length=16, blank=True)
     websites = models.ManyToManyField(Website, blank=True)
-    email = models.EmailField(max_length=100, unique=True)
+    email = models.EmailField(max_length=100, blank=True, unique=True)
     location = models.ForeignKey(Location, null=True, on_delete=models.SET_NULL)
     created_ts = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="created_by", on_delete=models.CASCADE)
@@ -223,9 +236,9 @@ class Relationship(models.Model):
     type = models.CharField(max_length=16, choices=RELATIONSHIP_TYPES, default=OTHER)
     person = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    start_day = models.PositiveSmallIntegerField(blank=True, null=True)
-    start_month = models.PositiveSmallIntegerField(blank=True, null=True)
-    start_year = models.PositiveSmallIntegerField(blank=True, null=True)
-    end_day = models.PositiveSmallIntegerField(blank=True, null=True)
-    end_month = models.PositiveSmallIntegerField(blank=True, null=True)
-    end_year = models.PositiveSmallIntegerField(blank=True, null=True)
+    start_day = models.PositiveSmallIntegerField(null=True, blank=True)
+    start_month = models.PositiveSmallIntegerField(null=True, blank=True)
+    start_year = models.PositiveSmallIntegerField(null=True, blank=True)
+    end_day = models.PositiveSmallIntegerField(null=True, blank=True)
+    end_month = models.PositiveSmallIntegerField(null=True, blank=True)
+    end_year = models.PositiveSmallIntegerField(null=True, blank=True)
