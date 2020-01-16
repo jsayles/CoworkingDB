@@ -100,6 +100,12 @@ class Person(AbstractUser):
             email_address.is_primary = True
             email_address.save()
 
+    def get_absolute_url(self):
+        return reverse('profile_edit', kwargs={'username': self.username})
+
+    def get_admin_url(self):
+        return reverse('admin:coredb_person_change', args=[self.id])
+
 
 @receiver(post_save, sender=Person)
 def person_post_save(**kwargs):

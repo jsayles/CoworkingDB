@@ -1,27 +1,55 @@
+import logging
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404, render
+from django.views.decorators.csrf import csrf_protect
+from django.http import HttpResponse, HttpResponseRedirect
 
-# from coredb.models import Organization, Location, SwitchStack, Switch, VLAN, Port
+from coredb.models import Person, Company, Relationship
+
+logger = logging.getLogger(__name__)
 
 
 #########################################################################
 # Generic Views
 #########################################################################
 
+
 def home(request):
     context = {}
     return render(request, 'coredb/home.html', context)
 
-@staff_member_required
+
+@login_required
 def search(request):
     context = {
     }
     return render(request, 'coredb/search.html', context)
 
-#
+
+#########################################################################
+# Profile Views
+#########################################################################
+
+
+@login_required
+def profile_redirect(request):
+    person = request.user
+    return HttpResponseRedirect(person.get_absolute_url())
+
+
+@login_required
+def profile_edit(request, username):
+    person = get_object_or_404(Person, username=username)
+    context = {
+        "person": person
+    }
+    return render(request, 'coredb/profile_edit.html', context)
+
+
 # @staff_member_required
 # def search(request):
 #     closets = Location.objects.data_closets()
@@ -141,35 +169,96 @@ def search(request):
 #         'ports': ports,
 #     }
 #     return render(request, 'coredb/vlan_view.html', context)
-#
-# #########################################################################
-# # Org Views
-# #########################################################################
-#
-# @staff_member_required
-# def org_list(request):
-#     orgs = Organization.objects.all().order_by('name')
-#     context = {
-#         'orgs': orgs,
-#     }
-#     return render(request, 'coredb/org_list.html', context)
-#
-#
-# @staff_member_required
-# def org_view(request, org_id):
-#     org = get_object_or_404(Organization, id=org_id)
-#     ports = org.ports()
-#     context = {
-#         'org': org,
-#         'ports': ports,
-#     }
-#     return render(request, 'coredb/org_view.html', context)
-#
-# @staff_member_required
-# def org_print(request, org_id):
-#     org = get_object_or_404(Organization, id=org_id)
-#     context = {
-#         'org': org,
-#         'vlan': org.vlan,
-#     }
-#     return render(request, 'coredb/org_print.html', context)
+
+
+##########################################################################
+# Email Views
+##########################################################################
+
+
+@login_required
+def email_manage(request, email_pk, action):
+    """Set the requested email address as the primary. Can only be
+    requested by the owner of the email address."""
+    email_address = get_object_or_404(EmailAddress, pk=email_pk)
+    if not email_address.user == request.user and not request.user.is_staff:
+        messages.error(request, "You are not authorized to manage this email address")
+    # if not email_address.is_verified():
+    #     messages.error(request, "Email '%s' needs to be verified first." % email_address.email)
+
+    if action == "set_primary":
+        email_address.set_primary()
+        messages.success(request, "'%s' is now marked as your primary email address." % email_address.email)
+    elif action == "delete":
+        email_address.delete()
+        messages.success(request, "'%s' has been removed." % email_address.email)
+
+    if 'HTTP_REFERER' in request.META:
+        return redirect(request.META['HTTP_REFERER'])
+    else:
+        return redirect(reverse('member:profile:view', kwargs={'username': email_address.user.username}))
+
+
+@login_required
+def email_add(request):
+    user = get_object_or_404(User, username=request.POST.get("username"))
+    email = request.POST.get("email")
+    if email:
+        e = EmailAddress(user=user, email=email.lower())
+        e.save(verify=True)
+    if 'HTTP_REFERER' in request.META:
+        return redirect(request.META['HTTP_REFERER'])
+    else:
+        return redirect(reverse('member:profile:view', kwargs={'username': email_address.user.username}))
+
+
+@login_required
+def email_delete(request, email_pk):
+    """Delete the given email. Must be owned by current user."""
+    email = get_object_or_404(EmailAddress, pk=int(email_pk))
+    if email.user == request.user:
+        if not email.is_verified():
+            email.delete()
+        else:
+            num_verified_emails = len(request.user.emailaddress_set.filter(
+                verified_at__isnull=False))
+            if num_verified_emails > 1:
+                email.delete()
+            elif num_verified_emails == 1:
+                if MM.ALLOW_REMOVE_LAST_VERIFIED_EMAIL:
+                    email.delete()
+                else:
+                    messages.error(request,
+                        MM.REMOVE_LAST_VERIFIED_EMAIL_ATTEMPT_MSG,
+                            extra_tags='alert-error')
+    else:
+        messages.error(request, 'Invalid request.')
+    return redirect(MM.DELETE_EMAIL_REDIRECT)
+
+
+@csrf_protect
+def email_verify(request, email_pk):
+    email_address = get_object_or_404(EmailAddress, pk=email_pk)
+    if email_address.is_verified():
+        messages.error(request, "Email address was already verified.")
+    if not email_address.user == request.user and not request.user.is_staff:
+        messages.error(request, "You are not authorized to verify this email address")
+
+    # Send the verification link if that was requested
+    if 'send_link' in request.GET:
+        email.send_verification(email_address)
+
+    verif_key = request.GET.get('verif_key', "").strip()
+    if len(verif_key) != 0:
+        if email_address.verif_key == verif_key:
+            # Looks good!  Mark as verified
+            email_address.remote_addr = request.META.get('REMOTE_ADDR')
+            email_address.remote_host = request.META.get('REMOTE_HOST')
+            email_address.verified_ts = timezone.now()
+            email_address.save()
+            messages.success(request, "Email address has been verified.")
+            return HttpResponseRedirect(reverse('member:profile:view', kwargs={'username': email_address.user.username}))
+        else:
+            messages.error(request, "Invalid Key")
+
+    return render(request, "email_verify.html", {'email':email_address.email})
