@@ -219,9 +219,9 @@ def email_delete(request, email_pk):
     email = get_object_or_404(EmailAddress, pk=int(email_pk))
     if not email_address.person == request.user and not request.user.is_staff:
         messages.error(request, "You are not authorized to delete this email address")
-    elif len(email.person.emails.count() == 1:
+    elif len(email.person.emails.count()) == 1:
         messages.error(request, "You can not remove the last email address")
-    else
+    else:
         email.delete()
         messages.success(request, "Email address has been deleted.")
     return HttpResponseRedirect(email_address.person.get_absolute_url())

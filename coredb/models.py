@@ -87,7 +87,6 @@ class PersonManager(UserManager):
         return Person.objects.filter(id__in=consult_qs.values("person"))
 
 
-
 class Person(AbstractUser):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default="U")
     pronouns = models.CharField(max_length=64, blank=True)
@@ -121,7 +120,7 @@ def person_post_save(**kwargs):
     """Make sure Person.email is also an EmailAddress."""
     person = kwargs['instance']
     if person.email:
-        email_address = person.emails.filter(email=person.email).first() # there should be only one
+        email_address = EmailAddress.objects.filter(person=person, email=person.email).first() # there should be only one
         if not email_address:
             # Email was not in there so it should be created
             EmailAddress.objects.create(person=person, email=person.email, is_primary=True)
@@ -181,12 +180,12 @@ class EmailAddress(models.Model):
         random.seed(datetime.now())
         salt = random.randint(0, sys.maxsize)
         salted_email = "%s%s" % (salt, self.email)
-        self.verif_key = hashlib.sha1(salted_email.encode('utf-8')).hexdigest()
-        self.save()
+        return hashlib.sha1(salted_email.encode('utf-8')).hexdigest()
 
     def get_verif_key(self):
         if not self.verif_key:
-            self.generate_verif_key()
+            self.verif_key = self.generate_verif_key()
+            self.save()
         return self.verif_key
 
     def get_verify_link(self):
@@ -208,13 +207,11 @@ class EmailAddress(models.Model):
 
     def save(self, verify=True, *args, **kwargs):
         """Save this EmailAddress object."""
-        if not self.verif_key:
-            self.generate_verif_key()
-        if verify and not self.pk:
+        if self.pk:
             # Skip verification if this is an update
-            verify = True
-        else:
             verify = False
+        if not self.verif_key:
+            self.verif_key = self.generate_verif_key()
         super(EmailAddress, self).save(*args, **kwargs)
         # TODO - Send verification email!
         # if verify:
