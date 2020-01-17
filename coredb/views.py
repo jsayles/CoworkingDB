@@ -206,6 +206,7 @@ def email_add(request):
     if email:
         e = EmailAddress(person=person, email=email.lower())
         e.save(verify=True)
+        messages.success(request, "Email address has been added.")
     if 'HTTP_REFERER' in request.META:
         return redirect(request.META['HTTP_REFERER'])
     else:
@@ -216,23 +217,14 @@ def email_add(request):
 def email_delete(request, email_pk):
     """Delete the given email. Must be owned by current user."""
     email = get_object_or_404(EmailAddress, pk=int(email_pk))
-    if email.person == request.user:
-        if not email.is_verified():
-            email.delete()
-        else:
-            num_verified_emails = len(request.user.emails.all.filter(verified_at__isnull=False))
-            if num_verified_emails > 1:
-                email.delete()
-            elif num_verified_emails == 1:
-                if MM.ALLOW_REMOVE_LAST_VERIFIED_EMAIL:
-                    email.delete()
-                else:
-                    messages.error(request,
-                        MM.REMOVE_LAST_VERIFIED_EMAIL_ATTEMPT_MSG,
-                            extra_tags='alert-error')
-    else:
-        messages.error(request, 'Invalid request.')
-    return redirect(MM.DELETE_EMAIL_REDIRECT)
+    if not email_address.person == request.user and not request.user.is_staff:
+        messages.error(request, "You are not authorized to delete this email address")
+    elif len(email.person.emails.count() == 1:
+        messages.error(request, "You can not remove the last email address")
+    else
+        email.delete()
+        messages.success(request, "Email address has been deleted.")
+    return HttpResponseRedirect(email_address.person.get_absolute_url())
 
 
 @csrf_protect
