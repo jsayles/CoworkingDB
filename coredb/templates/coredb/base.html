@@ -1,3 +1,4 @@
+{% load settings_value %}
 {% load static %}
 
 <!DOCTYPE HTML>
@@ -30,25 +31,36 @@
 
   <body>
     <header>
-      <nav class="indigo"  role="navigation">
+
+      <!-- Admin Dropdown -->
+      <ul id="admin-dropdown" class="dropdown-content indigo">
+          <li><a href="{% url 'profile_redirect'%}">My Profile</a></li>
+          <li><a href="/logout">Logout</a></li>
+          {% if request.user.is_staff %}
+            <li class="divider"></li>
+            <li><a href="{% url 'admin:index' %}">Admin</a></li>
+          {% endif %}
+      </ul>
+
+      <nav class="indigo" role="navigation">
         <div class="nav-wrapper container">
           <a id="logo-container" href="/" class="brand-logo">
             <i class="large material-icons">people</i>
             <i class="large material-icons">compare_arrows</i>
-            <i class="large material-icons">business</i>
+            <i class="large material-icons">build</i>
             Coworking Relationship Database
           </a>
           <ul class="right hide-on-med-and-down">
             <li><a href="">People</a></li>
-            <li><a href="">Spaces</a></li>
-            <li><a href="">Vendors</a></li>
-            <li><a href="">Consultants</a></li>
+            <li><a href="">Projects</a></li>
             <li>
               <a href="{% url 'search' %}"><i class="material-icons">search</i></a>
             </li>
-            {% if request.user.is_staff %}
-              <li><a href="{% url 'admin:index' %}">Admin</a></li>
-            {% endif %}
+            <li>
+              <a href="{% url 'profile_redirect'%}" {% if request.user.is_authenticated %} class="dropdown-trigger" data-target="admin-dropdown"{% endif %}>
+                <i class="material-icons">account_circle</i>
+              </a>
+            </li>
           </ul>
         </div>
       </nav>
@@ -66,13 +78,24 @@
         Source for this application can be found on <a class="blue-gray" href="https://github.com/jsayles/CoworkingDB/">GitHub</a> |
         Template by <a class="blue-gray" href="http://materializecss.com">Materialize</a>
       </div>
+      </div>
     </footer>
 
     <!--  Scripts-->
+    <script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/init.js' %}"></script>
     {% block extrajs %}{% endblock %}
 
+    {% if not request.user.is_staff %}
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', '{% settings_value "GOOGLE_ANALYTICS_ID" %}', 'auto');
+        ga('send', 'pageview');
+      </script>
+    {% endif %}
   </body>
 </html>

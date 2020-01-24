@@ -25,6 +25,10 @@ ALLOWED_HOSTS = []
 # The Base URL for this application
 BASE_URL = "https://example.com"
 
+LOGIN_URL = "/login/"
+
+LOGOUT_REDIRECT_URL = "home"
+
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 DATABASES = {
