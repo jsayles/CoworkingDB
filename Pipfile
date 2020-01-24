@@ -8,8 +8,5 @@ setuptools = "*"
 pip-review = "*"
 
 [packages]
-psycopg2 = "==2.8.4"
+#psycopg2 = "==2.8.4"
 Django = ">=3.0"
-
-[requires]
-python_version = "3.7"
