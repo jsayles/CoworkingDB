@@ -51,11 +51,13 @@
             Coworking Relationship Database
           </a>
           <ul class="right hide-on-med-and-down">
-            <li><a href="">People</a></li>
-            <li><a href="">Projects</a></li>
-            <li>
-              <a href="{% url 'search' %}"><i class="material-icons">search</i></a>
-            </li>
+            {% if request.user.is_authenticated %}
+              <li><a href="">People</a></li>
+              <li><a href="">Projects</a></li>
+              <li>
+                <a href="{% url 'search' %}"><i class="material-icons">search</i></a>
+              </li>
+            {% endif %}
             <li>
               <a href="{% url 'profile_redirect'%}" {% if request.user.is_authenticated %} class="dropdown-trigger" data-target="admin-dropdown"{% endif %}>
                 <i class="material-icons">account_circle</i>
@@ -74,9 +76,9 @@
 
     <footer class="page-footer indigo darken-4">
       <div class="container">
-        Writen by <a class="blue-gray" href="https://jacobsayles.com">Jacob Sayles</a> |
+        Created by <a class="blue-gray" href="https://jacobsayles.com">Jacob Sayles</a> |
         Source for this application can be found on <a class="blue-gray" href="https://github.com/jsayles/CoworkingDB/">GitHub</a> |
-        Template by <a class="blue-gray" href="http://materializecss.com">Materialize</a>
+        Hosting provided by <a class="blue-gray" href="https://kanawha.design">Kanawha Design</a>
       </div>
       </div>
     </footer>

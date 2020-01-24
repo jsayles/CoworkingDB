@@ -31,8 +31,22 @@ def search(request):
 
 
 #########################################################################
-# Profile Views
+# Profile and Registration Views
 #########################################################################
+
+
+def request_invite(request):
+    name = None
+    email = None
+    if request.POST and 'name' in request.POST:
+        name = request.POST['name']
+        email = request.POST['email']
+        # TODO - Email admins that this person wants an account
+    context = {
+        "name": name,
+        "email": email,
+    }
+    return render(request, 'registration/request_invite.html', context)
 
 
 @login_required

@@ -10,9 +10,11 @@
       <h4 class="center">Please Authenticate</h4>
       <div id='login_reset'>
         <p style="font-style: italic;">
-          If you've forgotten your password, you will need to
-          <a href="{% url 'password_reset' %}">create a new password</a>.
+          If you've forgotten your password, or this is your first time signing in,
+          you will need to <a href="{% url 'password_reset' %}">create a new password</a>.<br>
+          If you do not have an account, you can <a href="{% url 'request_invite'%}">requst and invitation</a>.
         </p>
+
       </div>
       <div>
       <form id="login-form" method="post">

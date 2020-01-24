@@ -1,0 +1,33 @@
+{% extends "coredb/base.html" %}
+{% load static %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="section">
+    <div class="row center">
+      <h4 class="center">Request and Invitation</h4>
+      {% if name %}
+        Thank you {{ name }}.  We will review your request and get back to you soon.
+      {% else %}
+        <p>
+          Enter your name and email address and we'll get back to you as soon as possible.
+        </p>
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="name">Your Name:</label>
+            <input name="name"/>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address:</label>
+            <input name="email"/>
+          </div>
+          <button class="btn" type="submit">Request Invite</button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
