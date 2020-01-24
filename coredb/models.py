@@ -227,23 +227,29 @@ class EmailAddress(models.Model):
         super(EmailAddress, self).delete()
 
 
-class Company(models.Model):
+class Project(models.Model):
     SPACE = "space"
     VENDOR = "vendor"
-    CONSULT = "consult"
+    CONSULTANT = "consultant"
+    NONPROFIT = "nonprofit"
+    COOP = "coop"
+    COLLECTIVE = "collective"
     OTHER = "other"
 
-    COMPANY_TYPES = (
+    PROJECT_TYPES = (
         (SPACE, "Coworking Space"),
         (VENDOR, "Product Vendor"),
-        (CONSULT, "Consultantancy"),
+        (CONSULTANT, "Consultantancy"),
+        (NONPROFIT, "Non-Profit"),
+        (COOP, "Co-Operative"),
+        (COLLECTIVE, "Collective"),
         (OTHER, "Other"),
     )
 
     # Model definitions
     name = models.CharField(max_length=32)
     code = models.CharField(max_length=32, unique=True)
-    type = models.CharField(max_length=16, choices=COMPANY_TYPES, default=OTHER)
+    type = models.CharField(max_length=16, choices=PROJECT_TYPES, default=OTHER)
     description = models.TextField(blank=True)
     phone = models.CharField(max_length=16, blank=True)
     websites = models.ManyToManyField(Website, blank=True)
@@ -290,7 +296,7 @@ class Relationship(models.Model):
     # Model definitions
     type = models.CharField(max_length=16, choices=RELATIONSHIP_TYPES, default=OTHER)
     person = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     start_day = models.PositiveSmallIntegerField(null=True, blank=True)
     start_month = models.PositiveSmallIntegerField(null=True, blank=True)
     start_year = models.PositiveSmallIntegerField(null=True, blank=True)

@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.admin import UserAdmin
 
-from coredb.models import Person, Company, EmailAddress, Website
+from coredb.models import Person, Project, Relationship, EmailAddress, Website
 
 
 # class UserProfileInline(admin.StackedInline):
@@ -38,4 +38,6 @@ from coredb.models import Person, Company, EmailAddress, Website
 #
 
 # Register the other models too
-admin.site.register(Company)
+admin.site.register(Person)
+admin.site.register(Project)
+admin.site.register(Relationship)

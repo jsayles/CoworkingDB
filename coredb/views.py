@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponse, HttpResponseRedirect
 
-from coredb.models import Person, Company, Relationship, EmailAddress
+from coredb.models import Person, Project, Relationship, EmailAddress
 
 logger = logging.getLogger(__name__)
 
