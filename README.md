@@ -2,11 +2,20 @@
 
 ## Objective
 
-   The primary objective of this project is to create a simple,
-neutral, extensible database for coworking spaces around the world.
+ The primary objective of this project is to create a simple,
+neutral, extensible database for coworking relationships around the world.
+
+## Author
+
+This project was created and is maintained by Jacob Sayles of
+[Office Nomads](https://officenomads.com) and
+[Kanawha Design](https://kanawha.design).
 
 ## Logo & Favicon
 Image by [xwoodhillx](https://thenounproject.com/grzl/) from the Noun Project
+
+## Front-end Template
+  Template by [Materialize](http://materializecss.com).
 
 ## License
 
