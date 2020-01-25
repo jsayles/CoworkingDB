@@ -2,6 +2,7 @@ import logging
 
 from django.conf import settings
 from django.contrib import messages
+from django.core.mail import mail_admins
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404, render, redirect
@@ -41,7 +42,8 @@ def request_invite(request):
     if request.POST and 'name' in request.POST:
         name = request.POST['name']
         email = request.POST['email']
-        # TODO - Email admins that this person wants an account
+        message = f"Invitation Request from {name}:{email}"
+        mail_admins("[CO-RE-DB] Invitation Request", message, fail_silently=True)
     context = {
         "name": name,
         "email": email,
