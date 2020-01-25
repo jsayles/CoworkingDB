@@ -36,7 +36,7 @@ EMAIL_HOST_USER = "admin@example.com"
 EMAIL_HOST_PASSWORD = "password"
 EMAIL_USE_SSL = True
 EMAIL_PORT = 465
-EMAIL_SUBJECT_PREFIX = "[Co-Re-DB]"
+EMAIL_SUBJECT_PREFIX = "[Co-Re-DB] "
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
