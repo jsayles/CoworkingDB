@@ -43,7 +43,7 @@ def request_invite(request):
         name = request.POST['name']
         email = request.POST['email']
         message = f"Invitation Request from {name}:{email}"
-        mail_admins("[CO-RE-DB] Invitation Request", message, fail_silently=True)
+        mail_admins("Invitation Request", message, fail_silently=True)
     context = {
         "name": name,
         "email": email,
