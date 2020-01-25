@@ -4,6 +4,7 @@
 .DS_Store
 pip-log.txt
 backups
+logs
 */local_settings.py
 media
 media/*
