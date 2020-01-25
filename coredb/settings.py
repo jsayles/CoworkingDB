@@ -106,7 +106,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 # Load the local settings file
-if os.path.isfile('ktools/local_settings.py'):
+if os.path.isfile('coredb/local_settings.py'):
     from .local_settings import *
 else:
     print("No local settings file found")
