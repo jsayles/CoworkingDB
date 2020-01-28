@@ -5,13 +5,14 @@ import hashlib
 
 from datetime import datetime, time, date, timedelta
 
-from django.db import models
 from django.conf import settings
-from django.urls import reverse
-from django.db.models import Count
-from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.core.mail import mail_admins, send_mail
 from django.contrib.auth.models import UserManager, AbstractUser
+from django.dispatch import receiver
+from django.db import models
+from django.db.models.signals import post_save
+from django.template.loader import get_template, render_to_string
+from django.urls import reverse
 
 logger = logging.getLogger(__name__)
 
@@ -189,8 +190,9 @@ class EmailAddress(models.Model):
         return self.verif_key
 
     def get_verify_link(self):
-        verify_link = settings.EMAIL_VERIFICATION_URL
-        if not verify_link:
+        if hasattr(settings, 'EMAIL_VERIFICATION_URL'):
+            verify_link = settings.EMAIL_VERIFICATION_URL
+        else:
             verif_key = self.get_verif_key()
             uri = reverse('email_verify', kwargs={'email_pk': self.id}) + "?verif_key=" + verif_key
             verify_link = settings.BASE_URL + uri
@@ -205,6 +207,30 @@ class EmailAddress(models.Model):
     def get_delete_link(self):
         return reverse('email_manage', kwargs={'email_pk': self.id, 'action':'delete'})
 
+    def send_verification(self):
+        """Send email verification link for this EmailAddress object.
+        Raises smtplib.SMTPException, and NoRouteToHost.
+        """
+
+        # Build our context for rendering
+        context_dict = {
+            'email': self.email,
+            'user': self.person,
+            'verif_key': self.get_verif_key(),
+            'verif_link': self.get_verify_link(),
+            'base_url': settings.BASE_URL,
+            'site_name': settings.SITE_NAME,
+        }
+
+        subject = "Please Verify Your Email Address"
+        from_email = settings.SERVER_EMAIL
+        recipient_list = [self.email, ]
+        text_template = get_template('email/verification_email.txt')
+        text_msg = text_template.render(context=context_dict)
+        html_template = get_template('email/verification_email.html')
+        html_msg = html_template.render(context=context_dict)
+        send_mail(subject, text_msg, from_email, recipient_list, html_message=html_msg)
+
     def save(self, verify=True, *args, **kwargs):
         """Save this EmailAddress object."""
         if self.pk:
@@ -213,9 +239,8 @@ class EmailAddress(models.Model):
         if not self.verif_key:
             self.verif_key = self.generate_verif_key()
         super(EmailAddress, self).save(*args, **kwargs)
-        # TODO - Send verification email!
-        # if verify:
-        #     email.send_verification(self)
+        if verify:
+            email.send_verification(self)
 
     def delete(self):
         """Delete this EmailAddress object."""
@@ -278,7 +303,10 @@ class Relationship(models.Model):
     FOUNDER = "founder"
     OWNER = "owner"
     EMPLOYEE = "employee"
+    MEMBER = "member"
     VOLUNTEER = "volunteer"
+    WORKTRADE = "worktrade"
+    BOARD = "board"
     VENDOR = "vendor"
     CONSULT = "consultant"
     OTHER = "other"
@@ -287,7 +315,10 @@ class Relationship(models.Model):
         (FOUNDER, "Founder"),
         (OWNER, "Owner"),
         (EMPLOYEE, "Employee"),
+        (MEMBER, "Member"),
         (VOLUNTEER, "Volunteer"),
+        (WORKTRADE, "Work Trade"),
+        (BOARD, "Board Member"),
         (VENDOR, "Product Vendor"),
         (CONSULT, "Consultant"),
         (OTHER, "Other"),

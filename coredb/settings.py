@@ -25,6 +25,8 @@ ALLOWED_HOSTS = []
 # The Base URL for this application
 BASE_URL = "https://example.com"
 
+SITE_NAME = "The CRDB Project"
+
 LOGIN_URL = "/login/"
 
 LOGOUT_REDIRECT_URL = "home"
@@ -36,7 +38,7 @@ EMAIL_HOST_USER = "admin@example.com"
 EMAIL_HOST_PASSWORD = "password"
 EMAIL_USE_SSL = True
 EMAIL_PORT = 465
-EMAIL_SUBJECT_PREFIX = "[CO-RE-DB] "
+EMAIL_SUBJECT_PREFIX = "[CRDB] "
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
