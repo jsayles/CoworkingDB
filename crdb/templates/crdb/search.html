@@ -1,0 +1,65 @@
+{% extends "crdb/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+  <div class="section">
+
+    <div class="row center">
+      <h4 class="center">Port Search</h4>
+      {% if messages %}
+      	<div class="messages">
+      		{% for message in messages %}
+      			<div {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+      		{% endfor %}
+      	</div>
+      {% endif %}
+
+      <form method="POST" action="{% url 'search' %}?order_by={{order_by}}">
+        <div class="row">
+          <div class="col m3">
+            <h5>Port Label:</h5>
+          </div>
+          <div class="input-field col s3">
+            <select name="closet_number" class="browser-default">
+              <option value="" disabled selected>Data Closet</option>
+              {% for closet in closets %}
+                <option value="{{ closet.number }}">{{ closet}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="input-field col s3">
+            <input placeholder="i.e. A05, B26" name="port_label" class="validate"/>
+          </div>
+          <div class="input-field col s3">
+            <button class="btn waves-effect waves-light" type="submit" name="action">
+              Search
+              <i class="material-icons right">search</i>
+            </button>
+          </div>
+          {% csrf_token %}
+        </div>
+      </form>
+    </div>
+
+    {% if ports %}
+      <div class="row">
+        <h5 class="center">
+          <strong>Results ({{ ports|length }}):</strong>
+          Closet = {{ q_closet }}, Label = {{ q_label }}
+        </h5>
+        {% include 'crdb/port_table.html' %}
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('select').formSelect();
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "crdb/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+  <div class="section">
+    <div class="row center">
+      <h4>
+        <b>Location:</b> {{ location }}
+        <a href="{{ location.get_admin_url }}">
+          <i class="material-icons">edit</i>
+        </a>
+      </h4>
+      <h6>
+        {% if location.organization %}
+          <b>Org:</b> {{ location.organization }}
+        {% endif %}
+        <b>Floor:</b> {{ location.floor }}
+        <b>Ports:</b> {{ ports.count }}
+      </h6>
+      {% include 'crdb/port_table.html' %}
+    </div>
+  </div>
+</div>
+{% endblock %}

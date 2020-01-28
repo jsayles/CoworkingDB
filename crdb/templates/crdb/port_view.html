@@ -1,0 +1,61 @@
+{% extends "crdb/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+  <div class="section">
+    <div class="row center">
+      <h4>
+        <b>Port:</b> {{ port.label }}
+        <a href="{{ port.get_admin_url }}">
+          <i class="material-icons">edit</i>
+        </a>
+      </h4>
+      <div class="col m4"></div>
+      <div class="col m4 center">
+        <table>
+          <tr>
+            <th>Location:</th>
+            <td>
+              <a href="{{ port.location.get_absolute_url }}">
+                {{ port.location }}
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <th>Closet:</th>
+            <td>
+              <a href="{{ port.closet.get_absolute_url }}">
+                {{ port.closet }}
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <th>Switch:</th>
+            <td>
+              <a href="{{ port.switch.get_absolute_url }}">
+                {{ port.switch }} #{{ port.switch_port }}
+              </a>
+            </td>
+          </tr>
+          <th>Module:</th>
+          <td>
+            {{ port.module_id }}
+          </td>
+        </tr>
+
+          <tr>
+            <th>VLAN:</th>
+            <td>
+              <a href="{{ port.vlan.get_absolute_url }}">
+                {{ port.vlan }}
+              </a>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="col m4"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}

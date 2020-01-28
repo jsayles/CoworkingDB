@@ -1,0 +1,43 @@
+{% extends "crdb/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+  <div class="section">
+    <div class="row center">
+      <h4>
+        <b>Organization:</b> {{ org }}
+        <a href="{{ org.get_admin_url }}">
+          <i class="material-icons">edit</i>
+        </a>
+        <a href="{% url 'org_print' org.id %}">
+          <i class="material-icons">print</i>
+        </a>
+      </h4>
+
+      {% if org.vlan or org.wifi_network %}
+        <h5>Network Details</h5>
+        <b>VLAN:</b> {{ org.vlan }}
+        <b>WIFI:</b> {{ org.wifi_network }}
+      {% endif %}
+
+      {% if org.location_set.all %}
+        <h5>Locations ({{ org.location_set.count }})</h5>
+        <ul>
+        {% for l in org.location_set.all %}
+          <li>
+            <a href="{% url 'location' l.number %}">{{ l.number }}</a>: {{ l.name }}
+          </li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+
+
+      {% if ports %}
+        <h5>Ports ({{ ports | length }})</h5>
+        {% include 'crdb/port_table.html' %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

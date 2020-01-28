@@ -1,0 +1,24 @@
+{% extends "crdb/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+  <div class="section">
+    <div class="row center">
+      <h4>
+        <b>Switch:</b> {{ switch }}
+        <a href="{{ switch.get_admin_url }}">
+          <i class="material-icons">edit</i>
+        </a>
+      </h4>
+      <h6>
+        <b>Closet:</b> {{ switch.location }}
+        <b>Model:</b> {{ switch.make }} {{ switch.model }}
+        <b>Ports:</b>  {{ switch.port_count }}
+        <b>In Use:</b> {{ ports | length }}
+      </h6>
+      {% include 'crdb/port_table.html' %}
+    </div>
+  </div>
+</div>
+{% endblock %}

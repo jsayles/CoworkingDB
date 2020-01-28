@@ -1,0 +1,26 @@
+{% extends "crdb/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+  <div class="section">
+    <div class="row center">
+      <h4>
+        <b>VLAN:</b> {{ vlan }}
+        <a href="{{ vlan.get_admin_url }}">
+          <i class="material-icons">edit</i>
+        </a>
+      </h4>
+      <h6>
+        {% if vlan.organization %}
+          <b>Org:</b> {{ vlan.organization }}
+        {% endif %}
+        <b>Description:</b>  {{ vlan.description }}
+        <b>Range:</b>  {{ vlan.ip_range }}
+        <b>Ports:</b> {{ ports | length }}
+      </h6>
+      {% include 'crdb/port_table.html' %}
+    </div>
+  </div>
+</div>
+{% endblock %}
