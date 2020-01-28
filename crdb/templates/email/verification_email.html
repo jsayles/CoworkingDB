@@ -11,7 +11,7 @@
       "url": "{{ verify_link }}"
     }
   },
-  "description": "Verify your email address for {{ site_name }}."
+  "description": "Verify your email address."
 }
 </script>
 
@@ -23,14 +23,16 @@
 <p>{% trans "Please verify your e-mail address." %}</p>
 
 <p>
-  {% trans "A new e-mail address has been associated with your account at" %} {{ site_name }}.
-  {% trans "Please click the link below to verify your new address." %}
+  {% trans "A new e-mail address has been associated with your account at" %}
+  the Coworking Relationship Database.
+  {% trans "Please use the link below to verify your new address." %}
 </p>
 
-<h3>Your Verification Key: <a href="{{ verify_link }}">{{ verif_key }}</a></h3>
+<h3>Verification Key: <a href="{{ verify_link }}">{{ verif_key }}</a></h3>
+<h3>Verification Link: <a href="{{ verify_link }}">{{ verif_link }}</a></h3>
 
 <p>
 Thanks!<br>
-{{ site_name }} Team
+The CRDB Team
 </p>
 {% endautoescape %}

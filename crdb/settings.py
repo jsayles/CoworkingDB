@@ -25,8 +25,6 @@ ALLOWED_HOSTS = []
 # The Base URL for this application
 BASE_URL = "https://example.com"
 
-SITE_NAME = "The CRDB Project"
-
 LOGIN_URL = "/login/"
 
 LOGOUT_REDIRECT_URL = "home"

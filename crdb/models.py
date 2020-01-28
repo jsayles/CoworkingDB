@@ -219,7 +219,6 @@ class EmailAddress(models.Model):
             'verif_key': self.get_verif_key(),
             'verif_link': self.get_verify_link(),
             'base_url': settings.BASE_URL,
-            'site_name': settings.SITE_NAME,
         }
 
         subject = "Please Verify Your Email Address"

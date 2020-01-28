@@ -1,12 +1,14 @@
 {% load i18n %}
 {% trans "Please take a moment to verify your e-mail address." %}
 
+{% if user.first_name %}
+<p>Hello {{ user.first_name }},</p>
 
-Hello {{ user.first_name }},
-{% trans "A new e-mail address has been associated with your account at" %} {{ site_name }}.
+{% endif %}
+{% trans "A new e-mail address has been associated with your account at" %} the Coworking Relationship Database.
 {% trans "Please copy and paste the link below into your browser's address box to verify your new address." %}
 
 {{ verify_link }}
 
 Thanks!
-{{ site_name }} Team
+The CRDB Team
