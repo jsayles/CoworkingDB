@@ -5,27 +5,25 @@
 <div class="container">
   <div class="section">
     <div class="row center">
-      <h4 class="center">Organizations</h4>
+      <h4 class="center">People</h4>
       <table class="highlight centered">
       <thead>
         <tr>
           <th>Name</th>
-          <th>VLAN</th>
-          <th>Ports</th>
+          <th>Projects</th>
         </tr>
       </thead>
       <tbody>
-      {% for org in orgs %}
+      {% for person in people %}
         <tr>
           <td>
-            <a href="{% url 'org' org.id %}">
-              {{ org }}
-            </a>
+            {% if request.user.is_staff %}
+              <a href="{% url 'person_view' person.username %}">{{ person.get_full_name }}</a>
+            {% else %}
+              {{ person.get_full_name }}
+            {% endif %}
           </td>
-          <td>
-             {{ org.vlan }}
-          </td>
-          <td>{{ org.ports | length }}</td>
+          <td>{{ person.projects | length }}</td>
         </tr>
       {% endfor %}
       </tbody>

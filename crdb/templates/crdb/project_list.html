@@ -1,0 +1,41 @@
+{% extends "crdb/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+  <div class="section">
+    <div class="row center">
+      <h4 class="center">Projects</h4>
+      {% if request.user.is_staff %}
+      [ <a href="?view_flagged=True">View Flagged Projects</a> ]
+      {% endif %}
+      <table class="highlight centered">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Duration</th>
+          <!-- <th>People</th> -->
+        </tr>
+      </thead>
+      <tbody>
+      {% for project in projects %}
+        <tr>
+          <td>
+            {% if request.user.is_authenticated %}
+              <a href="{% url 'project' project.code %}">{{ project.name }}</a>
+            {% else %}
+              {{ project.name }}
+            {% endif %}
+          </td>
+          <td>{{ project.description }}</td>
+          <td>{{ project.duration }}</td>
+          <!-- <td>{{ project.people | length }}</td> -->
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

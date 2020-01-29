@@ -14,6 +14,16 @@ class RelationshipTestCase(TestCase):
         Project.objects.create(name="Vendor Inc.", code="vendor", type=ProjectType.VENDOR, email="vendor@example.com", created_by=person_one, updated_by=person_one)
         Project.objects.create(name="Consultants & Co", code="consult", type=ProjectType.CONSULTANT, email="consult@example.com", created_by=person_one, updated_by=person_one)
 
+    def test_project_people(self):
+        """Make sure Relationship is reflected in Project.people and Person.projects QuerySets."""
+        person_one = Person.objects.by_email("one@example.com")
+        project = Project.objects.get(code="space")
+        self.assertFalse(person_one in project.people())
+        self.assertFalse(project in person_one.projects())
+        Relationship.objects.create(type=RelationshipType.FOUNDER, person=person_one, project=project)
+        self.assertTrue(person_one in project.people())
+        self.assertTrue(project in person_one.projects())
+
     def test_founders(self):
         """Make Person One a Founder of Coworking Space."""
         person_one = Person.objects.by_email("one@example.com")

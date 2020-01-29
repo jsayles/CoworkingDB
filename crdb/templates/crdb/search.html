@@ -6,7 +6,7 @@
   <div class="section">
 
     <div class="row center">
-      <h4 class="center">Port Search</h4>
+      <h4 class="center">Search</h4>
       {% if messages %}
       	<div class="messages">
       		{% for message in messages %}
@@ -17,19 +17,11 @@
 
       <form method="POST" action="{% url 'search' %}?order_by={{order_by}}">
         <div class="row">
-          <div class="col m3">
-            <h5>Port Label:</h5>
+          <div class="col m4">
+            <h5>People Search:</h5>
           </div>
-          <div class="input-field col s3">
-            <select name="closet_number" class="browser-default">
-              <option value="" disabled selected>Data Closet</option>
-              {% for closet in closets %}
-                <option value="{{ closet.number }}">{{ closet}}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="input-field col s3">
-            <input placeholder="i.e. A05, B26" name="port_label" class="validate"/>
+          <div class="input-field col s5">
+            <input placeholder="Search by name or email address" name="people_search" class="validate"/>
           </div>
           <div class="input-field col s3">
             <button class="btn waves-effect waves-light" type="submit" name="action">

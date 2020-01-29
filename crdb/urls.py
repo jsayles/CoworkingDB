@@ -22,20 +22,16 @@ urlpatterns = [
     path('profile/', views.profile_redirect, name='profile_redirect'),
     path('profile/<str:username>', views.profile_edit, name='profile_edit'),
 
+    path('people/', views.people_list, name='people_list'),
+    path('person/<str:username>', views.person_view, name='person_view'),
+
+    path('projects/', views.project_list, name='project_list'),
+    path('profile/<str:code>', views.project_view, name='project_view'),
+
     path('email/add/', views.email_add, name='email_add'),
     path('email/manage/<email_pk>/<action>/', views.email_manage, name='email_manage'),
     path('email/verify/<email_pk>/', views.email_verify, name='email_verify'),
 
-    # path('port/<int:port_id>/', views.port_view, name='port'),
-    # path('locations/', views.location_list, name='locations'),
-    # path('location/<str:location>/', views.location_view, name='location'),
-    # path('switches/', views.switch_list, name='switches'),
-    # path('switch/<str:stack>/<int:unit>/', views.switch_view, name='switch'),
-    # path('vlans/', views.vlan_list, name='vlans'),
-    # path('vlan/<str:vlan>/', views.vlan_view, name='vlan'),
-    # path('orgs/', views.org_list, name='orgs'),
-    # path('org/<int:org_id>/', views.org_view, name='org'),
-    # path('print/org/<int:org_id>/', views.org_print, name='org_print'),
     path('admin/', admin.site.urls),
 ]
 

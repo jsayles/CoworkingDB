@@ -112,52 +112,19 @@
       </table>
       <table>
         <tr>
-          <td class='cap-label' id='pf-phone'>Primary Phone</td>
-          <td class='cap-label'>Alternate Phone</td>
+          <td class='cap-label' id='pf-phone'>Phone Number</td>
         </tr>
         <tr>
           <td class='pf-input'>{{ profile_form.phone }}</td>
-          <td class='pf-input'>{{ profile_form.phone2 }}</td>
         </tr>
         <tr>
           <td class='pf-error'>{{ profile_form.phone.errors }}</td>
-          <td class='pf-error'>{{ profile_form.phone2.errors }}</td>
         </tr>
       </table>
     </div>
 
     <h5 style='text-align:left;'>Profile Information</h5>
     <div id='websites'>
-      <table>
-        <tr>
-          <td id='pf-public' nowrap>
-            Visibility
-            (<a onclick="$('#public_help').toggle();">?</a>)
-          </td>
-          <td>
-            <select class='browser-default input-field col s4' name='public_profile' id='id_public_profile'>
-              <option value="False" {% if not user.profile.public_profile %} selected="true" {% endif %}>
-                Active Members Only
-              </option>
-              <option value="True" {% if user.profile.public_profile %} selected="true" {% endif %}>
-                Open to the Public
-              </option>
-            </select>
-          </td>
-          <td>
-            {{ profile_form.public_profile.errors }}
-          </td>
-        </tr>
-        <tr id='public_help' class='help_text'>
-          <td colspan=3>
-            <strong>Profile Visibility</strong>
-            <p>By default your profile is only viewable by active members.
-            If you you make this profile public, your bio, photo, and links
-            will be visable to non-members as well. Contact information
-            is always kept private.</p>
-          </td>
-        </tr>
-      </table>
       <table>
         <tr>
           <td class='cap-label viewable'><strong>Bio</strong></td>
@@ -168,57 +135,6 @@
         </tr>
       </table>
       </div>
-
-    <table id="otherinfo">
-      <tr>
-        <td class='cap-label'>How did you hear about us?</td>
-        <td>{{ profile_form.howHeard }}</td>
-        <td>
-          {{ profile_form.howHeard.errors }}
-        </td  >
-      </tr>
-      <tr>
-        <td class='cap-label viewable'><strong>What industry are you in?</strong></td>
-        <td>{{ profile_form.industry }}</td>
-        <td>
-          {{ profile_form.industry.errors }}
-        </td>
-      </tr>
-      <tr>
-        <td class='cap-label viewable'><strong>Neighborhood:</strong></td>
-        <td>{{ profile_form.neighborhood }}</td>
-        <td width="300px">
-          {{ profile_form.neighborhood.errors }}
-          {% if request.user.is_staff %}
-            [ <a href="" target="new">add</a> ]
-          {% endif %}
-        </td>
-      </tr>
-      <tr>
-        <td class='cap-label viewable'><strong>Do you have children?</strong></td>
-        <td>{{ profile_form.has_kids }}</td>
-        <td>{{ profile_form.has_kids.errors }}</td>
-      </tr>
-      <tr>
-        <td class='cap-label'>Are you self employed?</td>
-        <td>{{ profile_form.self_employed }}</td>
-        <td>{{ profile_form.self_employed.errors }}</td>
-      </tr>
-
-      </tr>
-      <tr>
-        <td class='cap-label'>Gender</td>
-        <td>{{ profile_form.gender }}</td>
-        <td width="300px">{{ profile_form.gender.errors }}</td>
-      </tr>
-
-    </tr>
-    <tr>
-      <td class='cap-label'>Preferred Pronouns</td>
-      <td>{{ profile_form.pronouns }}</td>
-      <td width="300px">{{ profile_form.pronouns.errors }}</td>
-    </tr>
-    </table>
 
     <h3 style='text-align:left;'>Websites</h3>
     {{ link_formset.management_form }}
@@ -236,40 +152,8 @@
   			</div>
   		</div>
   	</div>
-  {% endfor %}
+    {% endfor %}
 
-{% block emergency_info %}
-    <h3 style='text-align:left;'>Emergency Contact Information</h3>
-    <a name="emergency_contact"></a>
-    <div id='emergencyinfo'>
-      <table>
-        <tr>
-          <td class='cap-label'>Name</td>
-          <td class='cap-label'>Relationship</td>
-        </tr>
-        <tr>
-          <td class='pf-input'>{{ profile_form.emergency_name }}</td>
-          <td class='pf-input'>{{ profile_form.emergency_relationship }}</td>
-        </tr>
-        <tr>
-          <td>{{ profile_form.emergency_name.errors }}</td>
-          <td>{{ profile_form.emergency_relationship.errors }}</td>
-        </tr>
-        <tr>
-          <td class='cap-label'>Phone</td>
-          <td class='cap-label'>Email</td>
-        </tr>
-        <tr>
-          <td class='pf-input'>{{ profile_form.emergency_phone }}</td>
-          <td class='pf-input'>{{ profile_form.emergency_email }}</td>
-        </tr>
-        <tr>
-          <td>{{ profile_form.emergency_phone.errors }}</td>
-          <td>{{ profile_form.emergency_email.errors }}</td>
-        </tr>
-      </table>
-    </div>
-{% endblock %}
     <button class="btn waves-effect waves-light sub-btn" type="submit" value="Update Your Profile" />Update Your Profile</button>
     {% csrf_token %}
   </form>

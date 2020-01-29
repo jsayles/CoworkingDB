@@ -23,7 +23,9 @@
 
         <div class="col s12 m4">
           <div class="icon-block">
-            <h2 class="center light-blue-text"><i class="material-icons">people</i></h2>
+            <h2 class="center light-blue-text">
+              <a href="{% url 'people_list' %}"><i class="material-icons">people</i></a>
+            </h2>
             <h5 class="center">People</h5>
             <p class="light">
               This database starts with the individuals working in the world of coworking.
@@ -33,10 +35,11 @@
           </div>
         </div>
 
-
         <div class="col s12 m4">
           <div class="icon-block">
-            <h2 class="center light-blue-text"><i class="material-icons">compare_arrows</i></h2>
+            <h2 class="center light-blue-text">
+              <i class="material-icons">compare_arrows</i>
+            </h2>
             <h5 class="center">Relationships</h5>
             <p class="light">
               A Relationship is defined as two people working together on a project.
@@ -48,7 +51,9 @@
 
         <div class="col s12 m4">
           <div class="icon-block">
-            <h2 class="center light-blue-text"><i class="material-icons">build</i></h2>
+            <h2 class="center light-blue-text">
+              <a href="{% url 'project_list' %}"><i class="material-icons">build</i></a>
+            </h2>
             <h5 class="center">Projects</h5>
             <p class="light">
               Projects can be spaces, advocasy groups, regional collectives,

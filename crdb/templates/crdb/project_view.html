@@ -1,0 +1,24 @@
+{% extends "crdb/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+  <div class="section">
+    <div class="row center">
+      <h4>
+        <b>Project:</b> {{ project.name }}
+        {% if request.user.is_staff %}
+          <a href="{{ project.get_admin_url }}">
+            <i class="material-icons">edit</i>
+          </a>
+        {% endif %}
+      </h4>
+      <p>
+        <b>Description:</b>  {{ project.description }}
+        <b>Duration:</b>  {{ project.duration }}
+        <b>People:</b> {{ project.people | length }}
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

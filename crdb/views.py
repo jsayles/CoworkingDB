@@ -67,125 +67,59 @@ def profile_edit(request, username):
     return render(request, 'crdb/profile_edit.html', context)
 
 
-# @staff_member_required
-# def search(request):
-#     closets = Location.objects.data_closets()
-#     ports = None
-#     closet_number = None
-#     port_label = None
-#     if request.POST:
-#         try:
-#             if 'closet_number' in request.POST:
-#                 closet_number = request.POST['closet_number']
-#                 closet = Location.objects.filter(number=closet_number).first()
-#                 ports = Port.objects.filter(closet=closet)
-#             else:
-#                 ports = Port.objects.all()
-#
-#             if 'port_label' in request.POST:
-#                 port_label = request.POST['port_label']
-#                 alphas, digits = split_label(port_label)
-#                 if alphas:
-#                     ports = ports.filter(label__istartswith=alphas)
-#                 if digits:
-#                     ports = ports.filter(label__contains=digits)
-#         except Exception as e:
-#             messages.add_message(request, messages.ERROR, f"Error performing search: {e} ")
-#     order_by = request.GET.get('order_by', 'p')
-#     ports = sort_ports(ports, order_by)
-#     context = {
-#         'closets': closets,
-#         'ports': ports,
-#         'order_by': order_by,
-#         'q_closet': closet_number,
-#         'q_label': port_label,
-#     }
-#     return render(request, 'crdb/search.html', context)
-#
-# @staff_member_required
-# def port_view(request, port_id):
-#     port = get_object_or_404(Port, id=port_id)
-#     context = {
-#         'port': port,
-#     }
-#     return render(request, 'crdb/port_view.html', context)
-#
-# #########################################################################
-# # Location Views
-# #########################################################################
-#
-# @staff_member_required
-# def location_list(request):
-#     locations = (
-#         (0, Location.objects.filter(floor=0)),
-#         (1, Location.objects.filter(floor=1)),
-#         (2, Location.objects.filter(floor=2)),
-#     )
-#     context = {
-#         'locations': locations,
-#     }
-#     return render(request, 'crdb/location_list.html', context)
-#
-# @staff_member_required
-# def location_view(request, location):
-#     location = get_object_or_404(Location, number=location)
-#     order_by = request.GET.get('order_by', 's')
-#     ports = sort_ports(location.port_set.all(), order_by)
-#     context = {
-#         'location': location,
-#         'order_by': order_by,
-#         'ports': ports,
-#     }
-#     return render(request, 'crdb/location_view.html', context)
-#
-# #########################################################################
-# # Switch Views
-# #########################################################################
-#
-# @staff_member_required
-# def switch_list(request):
-#     # A data closet is a location with switches in it
-#     closets = Location.objects.data_closets()
-#     context = {
-#         'closets': closets
-#     }
-#     return render(request, 'crdb/switch_list.html', context)
-#
-# @staff_member_required
-# def switch_view(request, stack, unit):
-#     switch = get_object_or_404(Switch, stack__name=stack, unit=unit)
-#     order_by = request.GET.get('order_by', 's')
-#     ports = sort_ports(switch.port_set.all(), order_by)
-#     context = {
-#         'switch': switch,
-#         'order_by': order_by,
-#         'ports': ports,
-#     }
-#     return render(request, 'crdb/switch_view.html', context)
-#
-# #########################################################################
-# # VLAN Views
-# #########################################################################
-#
-# @staff_member_required
-# def vlan_list(request):
-#     vlans = VLAN.objects.all().order_by('tag')
-#     context = {
-#         'vlans': vlans,
-#     }
-#     return render(request, 'crdb/vlan_list.html', context)
-#
-# @staff_member_required
-# def vlan_view(request, vlan):
-#     vlan = get_object_or_404(VLAN, tag=vlan)
-#     order_by = request.GET.get('order_by', 's')
-#     ports = sort_ports(vlan.port_set.all(), order_by)
-#     context = {
-#         'vlan': vlan,
-#         'order_by': order_by,
-#         'ports': ports,
-#     }
-#     return render(request, 'crdb/vlan_view.html', context)
+#########################################################################
+# People Views
+#########################################################################
+
+
+@login_required
+def people_list(request):
+    people = Person.objects.all()
+    context = {
+        'people': people,
+    }
+    return render(request, 'crdb/people_list.html', context)
+
+
+def person_view(request, username):
+    person = get_object_or_404(Person, username=username)
+    context = {
+        'person': person,
+    }
+    return render(request, 'crdb/person_view.html', context)
+
+
+#########################################################################
+# Project Views
+#########################################################################
+
+
+def project_list(request):
+    projects = Project.objects.all()
+    view_flagged = 'flagged' in request.GET
+    if view_flagged and request.user.is_staff:
+        projects = projects.filter(is_flagged=True)
+    else:
+        projects = projects.filter(is_flagged=False)
+
+    # Possibly reorder the list
+    order_by = request.GET.get('order_by', '')
+    if order_by:
+        projects = projects.order_by(order_by)
+
+    context = {
+        'projects': projects,
+    }
+    return render(request, 'crdb/project_list.html', context)
+
+
+@login_required
+def project_view(request, code):
+    project = get_object_or_404(Project, code=code)
+    context = {
+        'project': project,
+    }
+    return render(request, 'crdb/project_view.html', context)
 
 
 ##########################################################################

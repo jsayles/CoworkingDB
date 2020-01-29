@@ -48,16 +48,15 @@
             <i class="large material-icons">people</i>
             <i class="large material-icons">compare_arrows</i>
             <i class="large material-icons">build</i>
-            Coworking Relationship Database
+            C&middot;R&middot;DB
+            <!-- Coworking Relationship Database -->
           </a>
           <ul class="right hide-on-med-and-down">
-            {% if request.user.is_authenticated %}
-              <li><a href="">People</a></li>
-              <li><a href="">Projects</a></li>
+              <li><a href="{% url 'people_list' %}">People</a></li>
+              <li><a href="{% url 'project_list' %}">Projects</a></li>
               <li>
                 <a href="{% url 'search' %}"><i class="material-icons">search</i></a>
               </li>
-            {% endif %}
             <li>
               <a href="{% url 'profile_redirect'%}" {% if request.user.is_authenticated %} class="dropdown-trigger" data-target="admin-dropdown"{% endif %}>
                 <i class="material-icons">account_circle</i>

@@ -286,6 +286,10 @@ class Person(AbstractUser):
     def get_admin_url(self):
         return reverse('admin:crdb_person_change', args=[self.id])
 
+    def projects(self):
+        relationships = self.relationship_set.all()
+        return Project.objects.filter(id__in=relationships.values("project"))
+
 
 @receiver(post_save, sender=Person)
 def person_post_save(**kwargs):
@@ -324,15 +328,28 @@ class Project(models.Model):
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="created_by", on_delete=models.CASCADE)
     updated_ts = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="updated_by", on_delete=models.CASCADE)
+    is_flagged = models.BooleanField(default=True)
+
+    def people(self):
+        """Return a QuerySet of all people associated with this project."""
+        relationships = self.relationship_set.all()
+        return Person.objects.filter(id__in=relationships.values("person"))
+
+    def duration(self):
+        """Return the amount of time this project has been around"""
+        if not self.start_year:
+            return ""
+        # TODO - Calculate
+        return "1 Year 6 Months"
+
+    def get_absolute_url(self):
+        return reverse('project', kwargs={'code': self.code})
+
+    def get_admin_url(self):
+        return reverse('admin:crdb_project_change', args=[self.id])
 
     def __str__(self):
         return self.name
-
-    # def get_absolute_url(self):
-    #     return reverse('vlan', kwargs={'vlan': self.tag})
-    #
-    # def get_admin_url(self):
-    #     return reverse('admin:crdb_vlan_change', args=[self.id])
 
     class Meta:
         ordering = ['name',]
