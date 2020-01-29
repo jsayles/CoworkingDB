@@ -143,7 +143,7 @@ class EmailAddress(models.Model):
     verif_key = models.CharField(max_length=40)
     verified_ts = models.DateTimeField(default=None, blank=True, null=True)
     remote_addr = models.GenericIPAddressField(blank=True, null=True)
-    remote_host = models.CharField(max_length=255, blank=True)
+    remote_host = models.CharField(max_length=255, blank=True, null=True)
     is_primary = models.BooleanField(default=False)
 
     def __str__(self):
