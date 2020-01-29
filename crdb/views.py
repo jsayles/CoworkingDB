@@ -8,6 +8,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponse, HttpResponseRedirect
+from django.utils.timezone import localtime, now
 
 from crdb.models import Person, Project, Relationship, EmailAddress
 
