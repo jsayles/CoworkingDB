@@ -5,48 +5,92 @@ import hashlib
 
 from datetime import datetime, time, date, timedelta
 
-from django.conf import settings
-from django.core.mail import mail_admins, send_mail
-from django.contrib.auth.models import UserManager, AbstractUser
-from django.dispatch import receiver
 from django.db import models
 from django.db.models.signals import post_save
-from django.template.loader import get_template, render_to_string
+from django.conf import settings
 from django.urls import reverse
+from django.dispatch import receiver
+from django.core.mail import mail_admins, send_mail
+from django.contrib.auth.models import UserManager, AbstractUser
+from django.template.loader import get_template, render_to_string
+from django.utils.translation import gettext_lazy as _
 
 logger = logging.getLogger(__name__)
 
 
-GENDER_CHOICES = (
-    ('U', 'Not recorded'),
-    ('M', 'Man'),
-    ('F', 'Woman'),
-    ('O', 'Something else'),
-)
+################################################################################
+# Choices Classes
+################################################################################
+
+class Month(models.IntegerChoices):
+    BLANK = 0, _("")
+    JAN = 1, _("January")
+    FEB = 2, _("February")
+    MAR = 3, _("March")
+    APR = 4, _("April")
+    MAY = 5, _("May")
+    JUN = 6, _("June")
+    JUL = 7, _("July")
+    AUG = 8, _("August")
+    SEP = 9, _("September")
+    OCT = 10, _("October")
+    NOV = 11, _("November")
+    DEC = 12, _("December")
+
+
+# TODO - Evaluate
+#class Year(models.IntegerChoices):
+#    BLANK = 0, _("")
+#    YEAR_1980 = 1, "1980"
+
+
+class Gender(models.TextChoices):
+    UNKNOWN = 'U', _('Not recorded')
+    MAN = 'M', _('Man')
+    WOMAN = 'F', _('Woman')
+    OTHER = 'O', _('Something else')
+
+
+class ProjectType(models.TextChoices):
+    SPACE = "SPC", _("Coworking Space")
+    VENDOR = "VEN", _("Product Vendor")
+    CONSULTANT = "CLT", _("Consultantancy")
+    NONPROFIT = "NPR", _("Non-Profit")
+    COOP = "COO", _("Co-Operative")
+    COLLECTIVE = "COL", _("Collective")
+    OTHER = "OTH", _("Other")
+
+
+class RelationshipType(models.TextChoices):
+    FOUNDER = "FND", _("Founder")
+    OWNER = "OWN", _("Owner")
+    EMPLOYEE = "EMP", _("Employee")
+    MEMBER = "MEM", _("Member")
+    VOLUNTEER = "VOL", _("Volunteer")
+    WORKTRADE = "TRA", _("Work Trade")
+    BOARD = "BOR", _("Board Member")
+    VENDOR = "VEN", _("Product Vendor")
+    CONSULT = "CLT", _("Consultant")
+    OTHER = "OTH", _("Other")
+
+
+class SiteType(models.TextChoices):
+    GITHUB = "GHB", _("github")
+    LINKEDIN = "LIN", _("linkedin")
+    FACEBOOK = "FBK", _("facebook")
+    INSTAGRAM = "IST", _("instagram")
+    PERSONAL = "PER", _("personal")
+    BLOG = "BLG", _("blog")
+    OTHER = "OTH",_("other")
+
+
+################################################################################
+# Supporting Models
+################################################################################
 
 
 class Website(models.Model):
-
-    GITHUB = "github"
-    LINKEDIN = "linkedin"
-    PERSONAL = "personal"
-    FACEBOOK = "facebook"
-    INSTAGRAM = "instagram"
-    BLOG = "blog"
-    OTHER = "other"
-
-    SITE_TYPES = (
-        (GITHUB, "github"),
-        (LINKEDIN, "linkedin"),
-        (PERSONAL, "personal"),
-        (FACEBOOK, "facebook"),
-        (INSTAGRAM, "instagram"),
-        (BLOG, "blog"),
-        (OTHER, "other"),
-    )
-
-    # Model definitions
-    type = models.CharField(max_length=16, choices=SITE_TYPES, default=OTHER)
+    type = models.CharField(max_length=3, choices=SiteType.choices, default=SiteType.OTHER)
     url = models.URLField()
 
     def __str__(self):
@@ -62,78 +106,6 @@ class Location(models.Model):
     country = models.CharField(max_length=128, blank=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
-
-
-class PersonManager(UserManager):
-
-    def by_email(self, email):
-        """Retrieve a Person based who has the given email address."""
-        email_address = EmailAddress.objects.filter(email=email).first() # There should be only one
-        if email_address:
-            return email_address.person
-
-    def founders(self):
-        """Return a QuerySet of all Persons with a Relationship of FOUNDER."""
-        founder_qs = Relationship.objects.filter(type=Relationship.FOUNDER)
-        return Person.objects.filter(id__in=founder_qs.values("person"))
-
-    def vendors(self):
-        """Return a QuerySet of all Persons with a Relationship of VENDOR."""
-        vendor_qs = Relationship.objects.filter(type=Relationship.VENDOR)
-        return Person.objects.filter(id__in=vendor_qs.values("person"))
-
-    def consultants(self):
-        """Return a QuerySet of all Persons with a Relationship of CONSULT."""
-        consult_qs = Relationship.objects.filter(type=Relationship.CONSULT)
-        return Person.objects.filter(id__in=consult_qs.values("person"))
-
-
-class Person(AbstractUser):
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default="U")
-    pronouns = models.CharField(max_length=64, blank=True)
-    websites = models.ManyToManyField(Website, blank=True)
-    location = models.ForeignKey(Location, null=True, on_delete=models.SET_NULL)
-    phone = models.CharField(max_length=16, blank=True)
-
-    objects = PersonManager()
-
-    def add_email(self, email, primary=False):
-        email_address = EmailAddress.objects.filter(person=self, email=email)
-        if not email_address:
-            email_address = EmailAddress.objects.create(person=self, email=email)
-        if primary:
-            # Update the Person model
-            self.email = email
-            self.save()
-            # Update the EmailAddress model
-            email_address.is_primary = True
-            email_address.save()
-
-    def get_absolute_url(self):
-        return reverse('profile_edit', kwargs={'username': self.username})
-
-    def get_admin_url(self):
-        return reverse('admin:crdb_person_change', args=[self.id])
-
-
-@receiver(post_save, sender=Person)
-def person_post_save(**kwargs):
-    """Make sure Person.email is also an EmailAddress."""
-    person = kwargs['instance']
-    if person.email:
-        email_address = EmailAddress.objects.filter(person=person, email=person.email).first() # there should be only one
-        if not email_address:
-            # Email was not in there so it should be created
-            EmailAddress.objects.create(person=person, email=person.email, is_primary=True)
-        elif not email_address.is_primary:
-            # Email was in there indicating this is being switched to primary
-            # Make the old primary not primary anymore
-            old_primary = person.emails.filter(is_primary=True).first() # There should be only one
-            if old_primary:
-                old_primary.is_primary = False
-                old_primary.save()
-            email_address.is_primary = True
-            email_address.save()
 
 
 class EmailAddress(models.Model):
@@ -251,34 +223,103 @@ class EmailAddress(models.Model):
         super(EmailAddress, self).delete()
 
 
+################################################################################
+# Main Models
+################################################################################
+
+
+class PersonManager(UserManager):
+
+    def by_email(self, email):
+        """Retrieve a Person based who has the given email address."""
+        email_address = EmailAddress.objects.filter(email=email).first() # There should be only one
+        if email_address:
+            return email_address.person
+
+    def founders(self):
+        """Return a QuerySet of all Persons with a Relationship of FOUNDER."""
+        founder_qs = Relationship.objects.filter(type=RelationshipType.FOUNDER)
+        return Person.objects.filter(id__in=founder_qs.values("person"))
+
+    def vendors(self):
+        """Return a QuerySet of all Persons with a Relationship of VENDOR."""
+        vendor_qs = Relationship.objects.filter(type=RelationshipType.VENDOR)
+        return Person.objects.filter(id__in=vendor_qs.values("person"))
+
+    def consultants(self):
+        """Return a QuerySet of all Persons with a Relationship of CONSULT."""
+        consult_qs = Relationship.objects.filter(type=RelationshipType.CONSULT)
+        return Person.objects.filter(id__in=consult_qs.values("person"))
+
+
+class Person(AbstractUser):
+    description = models.TextField(blank=True)
+    # TODO - We may want Gender for the Women who Cowork
+    # gender = models.CharField(max_length=1, choices=Gender.choices, default=Gender.UNKNOWN)
+    # pronouns = models.CharField(max_length=64, blank=True)
+    websites = models.ManyToManyField(Website, blank=True)
+    location = models.ForeignKey(Location, null=True, blank=True, on_delete=models.SET_NULL)
+    phone = models.CharField(max_length=16, blank=True)
+
+    objects = PersonManager()
+
+    class Meta:
+        ordering = ["first_name", "last_name", "date_joined"]
+        verbose_name = "person"
+        verbose_name_plural = "people"
+
+    def add_email(self, email, primary=False):
+        email_address = EmailAddress.objects.filter(person=self, email=email)
+        if not email_address:
+            email_address = EmailAddress.objects.create(person=self, email=email)
+        if primary:
+            # Update the Person model
+            self.email = email
+            self.save()
+            # Update the EmailAddress model
+            email_address.is_primary = True
+            email_address.save()
+
+    def get_absolute_url(self):
+        return reverse('profile_edit', kwargs={'username': self.username})
+
+    def get_admin_url(self):
+        return reverse('admin:crdb_person_change', args=[self.id])
+
+
+@receiver(post_save, sender=Person)
+def person_post_save(**kwargs):
+    """Make sure Person.email is also an EmailAddress."""
+    person = kwargs['instance']
+    if person.email:
+        email_address = EmailAddress.objects.filter(person=person, email=person.email).first() # there should be only one
+        if not email_address:
+            # Email was not in there so it should be created
+            EmailAddress.objects.create(person=person, email=person.email, is_primary=True)
+        elif not email_address.is_primary:
+            # Email was in there indicating this is being switched to primary
+            # Make the old primary not primary anymore
+            old_primary = person.emails.filter(is_primary=True).first() # There should be only one
+            if old_primary:
+                old_primary.is_primary = False
+                old_primary.save()
+            email_address.is_primary = True
+            email_address.save()
+
+
 class Project(models.Model):
-    SPACE = "space"
-    VENDOR = "vendor"
-    CONSULTANT = "consultant"
-    NONPROFIT = "nonprofit"
-    COOP = "coop"
-    COLLECTIVE = "collective"
-    OTHER = "other"
-
-    PROJECT_TYPES = (
-        (SPACE, "Coworking Space"),
-        (VENDOR, "Product Vendor"),
-        (CONSULTANT, "Consultantancy"),
-        (NONPROFIT, "Non-Profit"),
-        (COOP, "Co-Operative"),
-        (COLLECTIVE, "Collective"),
-        (OTHER, "Other"),
-    )
-
-    # Model definitions
     name = models.CharField(max_length=32)
     code = models.CharField(max_length=32, unique=True)
-    type = models.CharField(max_length=16, choices=PROJECT_TYPES, default=OTHER)
+    type = models.CharField(max_length=3, choices=ProjectType.choices, default=ProjectType.OTHER)
     description = models.TextField(blank=True)
     phone = models.CharField(max_length=16, blank=True)
     websites = models.ManyToManyField(Website, blank=True)
     email = models.EmailField(max_length=100, blank=True, unique=True)
     location = models.ForeignKey(Location, null=True, on_delete=models.SET_NULL)
+    start_month = models.PositiveSmallIntegerField(choices=Month.choices, default=Month.BLANK)
+    start_year = models.PositiveSmallIntegerField(null=True, blank=True)
+    end_month = models.PositiveSmallIntegerField(choices=Month.choices, default=Month.BLANK)
+    end_year = models.PositiveSmallIntegerField(null=True, blank=True)
     created_ts = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="created_by", on_delete=models.CASCADE)
     updated_ts = models.DateTimeField(auto_now=True)
@@ -298,38 +339,10 @@ class Project(models.Model):
 
 
 class Relationship(models.Model):
-
-    FOUNDER = "founder"
-    OWNER = "owner"
-    EMPLOYEE = "employee"
-    MEMBER = "member"
-    VOLUNTEER = "volunteer"
-    WORKTRADE = "worktrade"
-    BOARD = "board"
-    VENDOR = "vendor"
-    CONSULT = "consultant"
-    OTHER = "other"
-
-    RELATIONSHIP_TYPES = (
-        (FOUNDER, "Founder"),
-        (OWNER, "Owner"),
-        (EMPLOYEE, "Employee"),
-        (MEMBER, "Member"),
-        (VOLUNTEER, "Volunteer"),
-        (WORKTRADE, "Work Trade"),
-        (BOARD, "Board Member"),
-        (VENDOR, "Product Vendor"),
-        (CONSULT, "Consultant"),
-        (OTHER, "Other"),
-    )
-
-    # Model definitions
-    type = models.CharField(max_length=16, choices=RELATIONSHIP_TYPES, default=OTHER)
+    type = models.CharField(max_length=3, choices=RelationshipType.choices, default=RelationshipType.OTHER)
     person = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    start_day = models.PositiveSmallIntegerField(null=True, blank=True)
-    start_month = models.PositiveSmallIntegerField(null=True, blank=True)
+    start_month = models.PositiveSmallIntegerField(choices=Month.choices, default=Month.BLANK)
     start_year = models.PositiveSmallIntegerField(null=True, blank=True)
-    end_day = models.PositiveSmallIntegerField(null=True, blank=True)
-    end_month = models.PositiveSmallIntegerField(null=True, blank=True)
+    end_month = models.PositiveSmallIntegerField(choices=Month.choices, default=Month.BLANK)
     end_year = models.PositiveSmallIntegerField(null=True, blank=True)
