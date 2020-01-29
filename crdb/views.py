@@ -262,11 +262,11 @@ def email_verify(request, email_pk):
             # Looks good!  Mark as verified
             email_address.remote_addr = request.META.get('REMOTE_ADDR')
             email_address.remote_host = request.META.get('REMOTE_HOST')
-            email_address.verified_ts = timezone.now()
+            email_address.verified_ts = localtime(now())
             email_address.save()
             messages.success(request, "Email address has been verified.")
             return HttpResponseRedirect(email_address.person.get_absolute_url())
         else:
             messages.error(request, "Invalid Key")
 
-    return render(request, "email_verify.html", {'email':email_address.email})
+    return render(request, "registration/email_verify.html", {'email':email_address.email})

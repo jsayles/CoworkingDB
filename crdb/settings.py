@@ -63,7 +63,7 @@ AUTH_USER_MODEL = 'crdb.Person'
 
 ROOT_URLCONF = 'crdb.urls'
 
-WSGI_APPLICATION = 'crdb.wsgi.application'
+WSGI_APPLICATION = 'wsgi.application'
 
 INSTALLED_APPS = [
     'crdb',
