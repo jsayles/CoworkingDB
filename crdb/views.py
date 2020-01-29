@@ -253,7 +253,7 @@ def email_verify(request, email_pk):
 
     # Send the verification link if that was requested
     if 'send_link' in request.GET:
-        email.send_verification(email_address)
+        email_address.send_verification()
 
     verif_key = request.GET.get('verif_key', "").strip()
     if len(verif_key) != 0:
