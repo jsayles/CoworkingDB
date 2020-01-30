@@ -3,6 +3,7 @@
 *.class
 .DS_Store
 pip-log.txt
+.mypy_cache
 backups
 logs
 */local_settings.py

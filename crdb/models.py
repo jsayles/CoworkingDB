@@ -2,10 +2,11 @@ import sys
 import logging
 import random
 import hashlib
-
-from datetime import datetime, time, date, timedelta
+from datetime import datetime
+from typing import Optional, Union
 
 from django.db import models
+from django.db.models.query import QuerySet
 from django.db.models.signals import post_save
 from django.conf import settings
 from django.urls import reverse
@@ -93,7 +94,10 @@ class Website(models.Model):
     type = models.CharField(max_length=3, choices=SiteType.choices, default=SiteType.OTHER)
     url = models.URLField()
 
-    def __str__(self):
+    class Meta:
+        ordering = ['url',]
+
+    def __str__(self) -> str:
         return self.url
 
 
@@ -118,16 +122,19 @@ class EmailAddress(models.Model):
     remote_host = models.CharField(max_length=255, blank=True, null=True)
     is_primary = models.BooleanField(default=False)
 
-    def __str__(self):
+    class Meta:
+        ordering = ['email',]
+
+    def __str__(self) -> str:
         return self.email
 
-    def is_verified(self):
+    def is_verified(self) -> bool:
         """Is this e-mail address verified? Verification is indicated by
         existence of a verified timestamp which is the time the person
         followed the e-mail verification link."""
         return bool(self.verified_ts)
 
-    def set_primary(self):
+    def set_primary(self) -> None:
         """Set this e-mail address to the primary address by setting the
         email property on the person."""
         # If we are already primary, we're done
@@ -149,37 +156,33 @@ class EmailAddress(models.Model):
                     email.is_primary = False
                     email.save(verify=False)
 
-    def generate_verif_key(self):
+    def generate_verif_key(self) -> str:
         random.seed(datetime.now())
         salt = random.randint(0, sys.maxsize)
         salted_email = "%s%s" % (salt, self.email)
         return hashlib.sha1(salted_email.encode('utf-8')).hexdigest()
 
-    def get_verif_key(self):
+    def get_verif_key(self) -> str:
         if not self.verif_key:
             self.verif_key = self.generate_verif_key()
             self.save()
         return self.verif_key
 
-    def get_verify_link(self):
-        if hasattr(settings, 'EMAIL_VERIFICATION_URL'):
-            verify_link = settings.EMAIL_VERIFICATION_URL
-        else:
-            verif_key = self.get_verif_key()
-            uri = reverse('email_verify', kwargs={'email_pk': self.id}) + "?verif_key=" + verif_key
-            verify_link = settings.BASE_URL + uri
-        return verify_link
+    def get_verify_link(self) -> str:
+        verif_key = self.get_verif_key()
+        uri = reverse('email_verify', kwargs={'email_pk': self.id}) + "?verif_key=" + verif_key
+        return settings.BASE_URL + uri
 
-    def get_send_verif_link(self):
+    def get_send_verif_link(self) -> str:
         return reverse('email_verify', kwargs={'email_pk': self.id}) + "?send_link=True"
 
-    def get_set_primary_link(self):
+    def get_set_primary_link(self) -> str:
         return reverse('email_manage', kwargs={'email_pk': self.id, 'action':'set_primary'})
 
-    def get_delete_link(self):
+    def get_delete_link(self) -> str:
         return reverse('email_manage', kwargs={'email_pk': self.id, 'action':'delete'})
 
-    def send_verification(self):
+    def send_verification(self) -> int:
         """Send email verification link for this EmailAddress object.
         Raises smtplib.SMTPException, and NoRouteToHost.
         """
@@ -200,7 +203,7 @@ class EmailAddress(models.Model):
         text_msg = text_template.render(context=context_dict)
         html_template = get_template('email/verification_email.html')
         html_msg = html_template.render(context=context_dict)
-        send_mail(subject, text_msg, from_email, recipient_list, html_message=html_msg)
+        return send_mail(subject, text_msg, from_email, recipient_list, html_message=html_msg)
 
     def save(self, verify=True, *args, **kwargs):
         """Save this EmailAddress object."""
@@ -230,23 +233,24 @@ class EmailAddress(models.Model):
 
 class PersonManager(UserManager):
 
-    def by_email(self, email):
+    def by_email(self, email: str) -> Union['Person', None]:
         """Retrieve a Person based who has the given email address."""
         email_address = EmailAddress.objects.filter(email=email).first() # There should be only one
         if email_address:
             return email_address.person
+        return None
 
-    def founders(self):
+    def founders(self) -> 'QuerySet[Person]':
         """Return a QuerySet of all Persons with a Relationship of FOUNDER."""
         founder_qs = Relationship.objects.filter(type=RelationshipType.FOUNDER)
         return Person.objects.filter(id__in=founder_qs.values("person"))
 
-    def vendors(self):
+    def vendors(self) -> 'QuerySet[Person]':
         """Return a QuerySet of all Persons with a Relationship of VENDOR."""
         vendor_qs = Relationship.objects.filter(type=RelationshipType.VENDOR)
         return Person.objects.filter(id__in=vendor_qs.values("person"))
 
-    def consultants(self):
+    def consultants(self) -> 'QuerySet[Person]':
         """Return a QuerySet of all Persons with a Relationship of CONSULT."""
         consult_qs = Relationship.objects.filter(type=RelationshipType.CONSULT)
         return Person.objects.filter(id__in=consult_qs.values("person"))
@@ -268,8 +272,17 @@ class Person(AbstractUser):
         verbose_name = "person"
         verbose_name_plural = "people"
 
-    def add_email(self, email, primary=False):
-        email_address = EmailAddress.objects.filter(person=self, email=email)
+    def __str__(self) -> str:
+        return self.get_full_name()
+
+    def get_absolute_url(self) -> str:
+        return reverse('profile_edit', kwargs={'username': self.username})
+
+    def get_admin_url(self) -> str:
+        return reverse('admin:crdb_person_change', args=[self.id])
+
+    def add_email(self, email: str, primary=False) -> 'EmailAddress':
+        email_address = EmailAddress.objects.filter(person=self, email=email).first()
         if not email_address:
             email_address = EmailAddress.objects.create(person=self, email=email)
         if primary:
@@ -279,14 +292,10 @@ class Person(AbstractUser):
             # Update the EmailAddress model
             email_address.is_primary = True
             email_address.save()
+        return email_address
 
-    def get_absolute_url(self):
-        return reverse('profile_edit', kwargs={'username': self.username})
-
-    def get_admin_url(self):
-        return reverse('admin:crdb_person_change', args=[self.id])
-
-    def projects(self):
+    def projects(self) -> 'QuerySet[Project]':
+        """Return all Projects associated with this Person."""
         relationships = self.relationship_set.all()
         return Project.objects.filter(id__in=relationships.values("project"))
 
@@ -330,29 +339,29 @@ class Project(models.Model):
     updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="updated_by", on_delete=models.CASCADE)
     is_flagged = models.BooleanField(default=True)
 
-    def people(self):
+    class Meta:
+        ordering = ['name',]
+
+    def __str__(self) -> str:
+        return self.name
+
+    def get_absolute_url(self) -> str:
+        return reverse('project', kwargs={'code': self.code})
+
+    def get_admin_url(self) -> str:
+        return reverse('admin:crdb_project_change', args=[self.id])
+
+    def people(self) -> 'QuerySet[Person]':
         """Return a QuerySet of all people associated with this project."""
         relationships = self.relationship_set.all()
         return Person.objects.filter(id__in=relationships.values("person"))
 
-    def duration(self):
+    def duration(self) -> str:
         """Return the amount of time this project has been around"""
         if not self.start_year:
             return ""
         # TODO - Calculate
         return "1 Year 6 Months"
-
-    def get_absolute_url(self):
-        return reverse('project', kwargs={'code': self.code})
-
-    def get_admin_url(self):
-        return reverse('admin:crdb_project_change', args=[self.id])
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        ordering = ['name',]
 
 
 class Relationship(models.Model):

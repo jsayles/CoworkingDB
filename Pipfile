@@ -6,6 +6,8 @@ verify_ssl = true
 [dev-packages]
 setuptools = "*"
 pip-review = "*"
+django-stubs = "*"
+mypy = "*"
 
 [packages]
 #psycopg2 = "==2.8.4"
