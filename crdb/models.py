@@ -123,7 +123,7 @@ class EmailAddress(models.Model):
     is_primary = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['email',]
+        ordering = ['-is_primary', 'email',]
 
     def __str__(self) -> str:
         return self.email
