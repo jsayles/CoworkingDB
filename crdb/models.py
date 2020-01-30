@@ -285,6 +285,15 @@ class Person(AbstractUser):
             email_address.save()
         return email_address
 
+    def save_url(self, url_type: str, url_value: str) -> None:
+        if url_type and url_value:
+            w = self.websites.filter(type=url_type).first()
+            if w:
+                w.url = url_value
+                w.save()
+            else:
+                self.websites.create(type=url_type, url=url_value)
+
     def projects(self) -> 'QuerySet[Project]':
         """Return all Projects associated with this Person."""
         relationships = self.relationship_set.all()

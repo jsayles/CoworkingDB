@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from crdb.models import Person, EmailAddress
+from crdb.models import Person, EmailAddress, SiteType
 
 
 class PersonTestCase(TestCase):
@@ -53,3 +53,19 @@ class PersonTestCase(TestCase):
         # Assume our new model is properly set as primary
         email_address = EmailAddress.objects.get(email=new_email)
         self.assertTrue(email_address.is_primary)
+
+    def test_save_url(self):
+        person_one = Person.objects.get(username='person_one')
+        website_one = "https://github.com/person_one"
+        website_two = "https://github.com/p1"
+        self.assertEqual(0, person_one.websites.count())
+
+        # Save a Github URL and test it was saved
+        person_one.save_url(SiteType.GITHUB, website_one)
+        self.assertEqual(1, person_one.websites.count())
+        self.assertEqual(website_one, person_one.websites.first().url)
+        
+        # Save another Github URL and assume it overwrites the first one
+        person_one.save_url(SiteType.GITHUB, website_two)
+        self.assertEqual(1, person_one.websites.count())
+        self.assertEqual(website_two, person_one.websites.first().url)
