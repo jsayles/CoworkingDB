@@ -26,7 +26,9 @@ urlpatterns = [
     path('person/<str:username>', views.person_view, name='person_view'),
 
     path('projects/', views.project_list, name='project_list'),
-    path('profile/<str:code>', views.project_view, name='project_view'),
+    path('project/edit/', views.project_edit, name='project_edit'),
+    path('project/edit/<str:code>', views.project_edit, name='project_edit'),
+    path('project/view/<str:code>', views.project_view, name='project_view'),
 
     path('email/add/', views.email_add, name='email_add'),
     path('email/manage/<email_pk>/<action>/', views.email_manage, name='email_manage'),

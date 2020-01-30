@@ -8,9 +8,11 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 from django.utils.timezone import localtime, now
 
 from crdb.models import Person, Project, Relationship, EmailAddress
+from crdb.forms import ProjectForm
 
 logger = logging.getLogger(__name__)
 
@@ -94,6 +96,7 @@ def person_view(request, username):
 #########################################################################
 
 
+@login_required
 def project_list(request):
     projects = Project.objects.all()
     view_flagged = 'flagged' in request.GET
@@ -111,6 +114,18 @@ def project_list(request):
         'projects': projects,
     }
     return render(request, 'crdb/project_list.html', context)
+
+
+def project_edit(request, code=None):
+    if request.method == 'POST':
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            messages.success(request, "Project has been saved.")
+            return HttpResponseRedirect(reverse('project_list'))
+    else:
+        form = ProjectForm()
+    context = { 'form': form, }
+    return render(request, 'crdb/project_edit.html', context)
 
 
 @login_required

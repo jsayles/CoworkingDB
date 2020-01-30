@@ -77,6 +77,7 @@ class RelationshipType(models.TextChoices):
 
 class SiteType(models.TextChoices):
     GITHUB = "GHB", _("github")
+    TWITTER = "TWT", _("twitter")
     LINKEDIN = "LIN", _("linkedin")
     FACEBOOK = "FBK", _("facebook")
     INSTAGRAM = "IST", _("instagram")
