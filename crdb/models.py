@@ -156,22 +156,10 @@ class EmailAddress(models.Model):
                     email.is_primary = False
                     email.save(verify=False)
 
-    def generate_verif_key(self) -> str:
-        random.seed(datetime.now())
-        salt = random.randint(0, sys.maxsize)
-        salted_email = "%s%s" % (salt, self.email)
-        return hashlib.sha1(salted_email.encode('utf-8')).hexdigest()
-
-    def get_verif_key(self) -> str:
-        if not self.verif_key:
-            self.verif_key = self.generate_verif_key()
-            self.save()
-        return self.verif_key
-
-    def get_verify_link(self) -> str:
-        verif_key = self.get_verif_key()
-        uri = reverse('email_verify', kwargs={'email_pk': self.id}) + "?verif_key=" + verif_key
-        return settings.BASE_URL + uri
+    @property
+    def verify_link(self) -> str:
+        uri = reverse('email_verify', kwargs={'email_pk': self.id})
+        return settings.BASE_URL + uri + "?verif_key=" + self.verif_key
 
     def get_send_verif_link(self) -> str:
         return reverse('email_verify', kwargs={'email_pk': self.id}) + "?send_link=True"
@@ -191,8 +179,8 @@ class EmailAddress(models.Model):
         context_dict = {
             'email': self.email,
             'user': self.person,
-            'verif_key': self.get_verif_key(),
-            'verif_link': self.get_verify_link(),
+            'verif_key': self.verif_key,
+            'verify_link': self.verify_link,
             'base_url': settings.BASE_URL,
         }
 
@@ -211,7 +199,10 @@ class EmailAddress(models.Model):
             # Skip verification if this is an update
             verify = False
         if not self.verif_key:
-            self.verif_key = self.generate_verif_key()
+            random.seed(datetime.now())
+            salt = random.randint(0, sys.maxsize)
+            salted_email = "%s%s" % (salt, self.email)
+            self.verif_key = hashlib.sha1(salted_email.encode('utf-8')).hexdigest()
         super(EmailAddress, self).save(*args, **kwargs)
         if verify:
             self.send_verification()
