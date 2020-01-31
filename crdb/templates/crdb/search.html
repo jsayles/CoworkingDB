@@ -7,14 +7,6 @@
 
     <div class="row center">
       <h4 class="center">Search</h4>
-      {% if messages %}
-      	<div class="messages">
-      		{% for message in messages %}
-      			<div {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
-      		{% endfor %}
-      	</div>
-      {% endif %}
-
       <form method="POST" action="{% url 'search' %}?order_by={{order_by}}">
         <div class="row">
           <div class="col m4">

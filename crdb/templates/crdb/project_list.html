@@ -6,9 +6,13 @@
   <div class="section">
     <div class="row center">
       <h4 class="center">Projects</h4>
+      [
+        <a href="{% url 'project_edit' %}">Add Project</a>
+        | <a href="{% url 'search' %}">Find a Project</a>
       {% if request.user.is_staff %}
-      [ <a href="?view_flagged=True">View Flagged Projects</a> ]
+        | <a href="?view_flagged=True">View Flagged Projects</a>
       {% endif %}
+      ]
       <table class="highlight centered">
       <thead>
         <tr>

@@ -5,6 +5,7 @@
 <div class="container">
   <div class="section">
     <div class="row center">
+      <h4 class="center">{{ action | title }} a Project</h4>
       <form action="" method="post">
         {% csrf_token %}
         {{ form.as_table }}

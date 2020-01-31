@@ -117,6 +117,9 @@ def project_list(request):
 
 
 def project_edit(request, code=None):
+    action = "Add"
+    if code:
+        action = "Edit"
     if request.method == 'POST':
         form = ProjectForm(request.POST)
         if form.is_valid():
@@ -124,7 +127,10 @@ def project_edit(request, code=None):
             return HttpResponseRedirect(reverse('project_list'))
     else:
         form = ProjectForm()
-    context = { 'form': form, }
+    context = {
+        'action': action,
+        'form': form,
+    }
     return render(request, 'crdb/project_edit.html', context)
 
 

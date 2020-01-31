@@ -3,7 +3,7 @@ import logging
 import random
 import hashlib
 from datetime import datetime
-from typing import Optional, Union
+from typing import Union, List, Tuple
 
 from django.db import models
 from django.db.models.query import QuerySet
@@ -14,14 +14,21 @@ from django.dispatch import receiver
 from django.core.mail import mail_admins, send_mail
 from django.contrib.auth.models import UserManager, AbstractUser
 from django.template.loader import get_template, render_to_string
+from django.utils.timezone import localtime, now
 from django.utils.translation import gettext_lazy as _
 
 logger = logging.getLogger(__name__)
 
 
 ################################################################################
-# Choices Classes
+# Choice Classes and Utility Methods
 ################################################################################
+
+
+def year_choices() -> List[Tuple[int, str]]:
+    this_year = localtime(now()).year
+    return [(0, "")] + [(y, f"{y}") for y in range(this_year, 1989, -1)]
+
 
 class Month(models.IntegerChoices):
     BLANK = 0, _("")
@@ -37,12 +44,6 @@ class Month(models.IntegerChoices):
     OCT = 10, _("October")
     NOV = 11, _("November")
     DEC = 12, _("December")
-
-
-# TODO - Evaluate
-#class Year(models.IntegerChoices):
-#    BLANK = 0, _("")
-#    YEAR_1980 = 1, "1980"
 
 
 class Gender(models.TextChoices):

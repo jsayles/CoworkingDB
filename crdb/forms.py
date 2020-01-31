@@ -5,7 +5,8 @@ from django import forms
 from django.conf import settings
 from django.utils.timezone import localtime, now
 
-from crdb.models import Month, SiteType, Person
+from crdb.models import Person
+from crdb.models import year_choices, Month, SiteType
 
 logger = logging.getLogger(__name__)
 
@@ -76,7 +77,10 @@ class EditProfileForm(forms.Form):
 
 
 class ProjectForm(forms.Form):
-    name = forms.CharField(max_length=100)
-    description = forms.CharField(widget=forms.Textarea)
-    email = forms.EmailField()
-    # start_month = forms.ChoiceField(widget=forms.Select(), choices=Month.choices, required=False)
+    name = forms.CharField(label="Project Name", max_length=100)
+    email = forms.EmailField(label="Project Email")
+    start_year = forms.ChoiceField(widget=forms.Select(attrs={'class': 'browser-default'}), choices=year_choices())
+    start_month = forms.ChoiceField(widget=forms.Select(attrs={'class': 'browser-default'}), choices=Month.choices)
+    end_year = forms.ChoiceField(widget=forms.Select(attrs={'class': 'browser-default'}), choices=year_choices())
+    end_month = forms.ChoiceField(widget=forms.Select(attrs={'class': 'browser-default'}), choices=Month.choices)
+    description = forms.CharField(label="Project Description", widget=forms.Textarea)
