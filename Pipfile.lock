@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e61a87b669c59fe471ade806f963bbe4f1e5e69b5f664897e996d0bed98e1dea"
+            "sha256": "e04e47541fdbaceca2907a71ab981f7bf10f1ec6ae65b401ae5ad2e3987c41dd"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -44,11 +44,11 @@
         },
         "django": {
             "hashes": [
-                "sha256:4f2c913303be4f874015993420bf0bd8fd2097a9c88e6b49c6a92f9bdd3fb13a",
-                "sha256:8c3575f81e11390893860d97e1e0154c47512f180ea55bd84ce8fa69ba8051ca"
+                "sha256:2f1ba1db8648484dd5c238fb62504777b7ad090c81c5f1fd8d5eb5ec21b5f283",
+                "sha256:c91c91a7ad6ef67a874a4f76f58ba534f9208412692a840e1d125eb5c279cb0a"
             ],
             "index": "pypi",
-            "version": "==3.0.2"
+            "version": "==3.0.3"
         },
         "idna": {
             "hashes": [
@@ -56,6 +56,14 @@
                 "sha256:ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c"
             ],
             "version": "==2.8"
+        },
+        "pydiscourse": {
+            "hashes": [
+                "sha256:2439477abac8809a3795e211921cbeea2bdb4b0e10f8a86b1f92aa03468f3f17",
+                "sha256:eb28e2ac966a544ae9a0d9938ade8e3ff0b2dc9620ea5f369afa36ce38b65e65"
+            ],
+            "index": "pypi",
+            "version": "==1.0.0"
         },
         "pygithub": {
             "hashes": [
@@ -123,11 +131,11 @@
         },
         "django": {
             "hashes": [
-                "sha256:4f2c913303be4f874015993420bf0bd8fd2097a9c88e6b49c6a92f9bdd3fb13a",
-                "sha256:8c3575f81e11390893860d97e1e0154c47512f180ea55bd84ce8fa69ba8051ca"
+                "sha256:2f1ba1db8648484dd5c238fb62504777b7ad090c81c5f1fd8d5eb5ec21b5f283",
+                "sha256:c91c91a7ad6ef67a874a4f76f58ba534f9208412692a840e1d125eb5c279cb0a"
             ],
             "index": "pypi",
-            "version": "==3.0.2"
+            "version": "==3.0.3"
         },
         "django-stubs": {
             "hashes": [
