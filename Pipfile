@@ -11,6 +11,6 @@ mypy = "*"
 
 [packages]
 psycopg2 = "==2.8.4"
-Django = ">=3.0.3"
+Django = ">=3.0.4"
 PyGithub = "*"
 pydiscourse = "*"
