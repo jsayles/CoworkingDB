@@ -3,9 +3,7 @@ Welcome to The Coworking Relationship Database
 ==============================================
 
 
-Nadine is a Django web project which runs behind the scenes of coworking spaces.
-
-Nadine has four applications: Members, Staff, Admin, and Tablet.  These applications help your management team facilitate your coworking community.
+Highlighting the relationships we have through the projects we work on.
 
 
 License & Copyright
@@ -33,7 +31,7 @@ Indices and tables
   :glob:
   :caption: Object Model
 
-
+  test
   mailing_lists
   ldap_sync
   events

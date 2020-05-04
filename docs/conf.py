@@ -148,7 +148,7 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
-github_doc_root = 'https://github.com/jsayles/crdb/tree/master/docs'
+github_doc_root = 'https://github.com/jsayles/CoworkingDB/tree/master/docs'
 
 def setup(app):
     app.add_config_value(
