@@ -11,7 +11,7 @@ mypy = "*"
 
 [packages]
 Django = ">=3.0.4"
-psycopg2 = "==2.8.4"
+psycopg2 = "==2.8.5"
 djangorestframework = "*"
 django-filter = "*"
 markdown = "*"

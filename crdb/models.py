@@ -251,9 +251,8 @@ class PersonManager(UserManager):
 
 class Person(AbstractUser):
     description = models.TextField(blank=True)
-    # TODO - We may want Gender for the Women who Cowork
-    # gender = models.CharField(max_length=1, choices=Gender.choices, default=Gender.UNKNOWN)
-    # pronouns = models.CharField(max_length=64, blank=True)
+    gender = models.CharField(max_length=1, choices=Gender.choices, default=Gender.UNKNOWN)
+    pronouns = models.CharField(max_length=64, blank=True)
     websites = models.ManyToManyField(Website, blank=True)
     location = models.ForeignKey(Location, null=True, blank=True, on_delete=models.SET_NULL)
     phone = models.CharField(max_length=16, blank=True)
@@ -368,9 +367,15 @@ class Project(models.Model):
 
 class Relationship(models.Model):
     type = models.CharField(max_length=3, choices=RelationshipType.choices, default=RelationshipType.OTHER)
-    person = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     start_month = models.PositiveSmallIntegerField(choices=Month.choices, default=Month.BLANK)
     start_year = models.PositiveSmallIntegerField(null=True, blank=True)
     end_month = models.PositiveSmallIntegerField(choices=Month.choices, default=Month.BLANK)
     end_year = models.PositiveSmallIntegerField(null=True, blank=True)
+
+
+class PersonalRelationship(Relationship):
+    person = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+
+class ProjectRelationship(Relationship):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
