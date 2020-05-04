@@ -12,10 +12,17 @@ mypy = "*"
 [packages]
 Django = ">=3.0.4"
 psycopg2 = "==2.8.5"
+
+# API
 djangorestframework = "*"
 django-filter = "*"
 markdown = "*"
 pygments = "*"
 
+# External hooks
 PyGithub = "*"
 pydiscourse = "*"
+
+# Documentation
+sphinx = "*"
+recommonmark = "*"
