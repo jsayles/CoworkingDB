@@ -78,6 +78,7 @@ WSGI_APPLICATION = 'wsgi.application'
 
 INSTALLED_APPS = [
     'crdb',
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -6,7 +6,7 @@ from django.contrib.auth import views as auth_views
 from django.http import HttpResponse, HttpResponseRedirect
 
 
-from crdb import views
+from crdb import views, api
 
 app_name = 'crdb'
 urlpatterns = [
@@ -37,6 +37,8 @@ urlpatterns = [
     path('email/verify/<email_pk>/', views.email_verify, name='email_verify'),
 
     path('admin/', admin.site.urls),
+    path('api/', include('crdb.api')),
+
 ]
 
 # if settings.DEBUG:

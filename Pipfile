@@ -10,7 +10,12 @@ django-stubs = "*"
 mypy = "*"
 
 [packages]
-psycopg2 = "==2.8.4"
 Django = ">=3.0.4"
+psycopg2 = "==2.8.4"
+djangorestframework = "*"
+django-filter = "*"
+markdown = "*"
+pygments = "*"
+
 PyGithub = "*"
 pydiscourse = "*"
