@@ -235,17 +235,17 @@ class PersonManager(UserManager):
 
     def founders(self) -> 'QuerySet[Person]':
         """Return a QuerySet of all Persons with a Relationship of FOUNDER."""
-        founder_qs = Relationship.objects.filter(type=RelationshipType.FOUNDER)
+        founder_qs = PersonalRelationship.objects.filter(type=RelationshipType.FOUNDER)
         return Person.objects.filter(id__in=founder_qs.values("person"))
 
     def vendors(self) -> 'QuerySet[Person]':
         """Return a QuerySet of all Persons with a Relationship of VENDOR."""
-        vendor_qs = Relationship.objects.filter(type=RelationshipType.VENDOR)
+        vendor_qs = PersonalRelationship.objects.filter(type=RelationshipType.VENDOR)
         return Person.objects.filter(id__in=vendor_qs.values("person"))
 
     def consultants(self) -> 'QuerySet[Person]':
         """Return a QuerySet of all Persons with a Relationship of CONSULT."""
-        consult_qs = Relationship.objects.filter(type=RelationshipType.CONSULT)
+        consult_qs = PersonalRelationship.objects.filter(type=RelationshipType.CONSULT)
         return Person.objects.filter(id__in=consult_qs.values("person"))
 
 
@@ -297,7 +297,7 @@ class Person(AbstractUser):
 
     def projects(self) -> 'QuerySet[Project]':
         """Return all Projects associated with this Person."""
-        relationships = self.relationship_set.all()
+        relationships = PersonalRelationship.objects.filter(person=self)
         return Project.objects.filter(id__in=relationships.values("project"))
 
 
@@ -354,8 +354,13 @@ class Project(models.Model):
 
     def people(self) -> 'QuerySet[Person]':
         """Return a QuerySet of all people associated with this project."""
-        relationships = self.relationship_set.all()
+        relationships = PersonalRelationship.objects.filter(project=self)
         return Person.objects.filter(id__in=relationships.values("person"))
+
+    def related_projects(self) -> 'QuerySet[Project]':
+        """Return a QuerySet of all related projects associated with this project."""
+        relationships = ProjectRelationship.objects.filter(project=self)
+        return ProjectPerson.objects.filter(id__in=relationships.values("related_project"))
 
     def duration(self) -> str:
         """Return the amount of time this project has been around"""
@@ -367,6 +372,7 @@ class Project(models.Model):
 
 class Relationship(models.Model):
     type = models.CharField(max_length=3, choices=RelationshipType.choices, default=RelationshipType.OTHER)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     start_month = models.PositiveSmallIntegerField(choices=Month.choices, default=Month.BLANK)
     start_year = models.PositiveSmallIntegerField(null=True, blank=True)
     end_month = models.PositiveSmallIntegerField(choices=Month.choices, default=Month.BLANK)
@@ -378,4 +384,4 @@ class PersonalRelationship(Relationship):
 
 
 class ProjectRelationship(Relationship):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    related_project = models.ForeignKey(Project, on_delete=models.CASCADE)

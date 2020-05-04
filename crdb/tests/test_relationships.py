@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from crdb.models import Person, Project, Relationship
+from crdb.models import Person, Project, PersonalRelationship
 from crdb.models import ProjectType, RelationshipType
 
 
@@ -20,7 +20,7 @@ class RelationshipTestCase(TestCase):
         project = Project.objects.get(code="space")
         self.assertFalse(person_one in project.people())
         self.assertFalse(project in person_one.projects())
-        Relationship.objects.create(type=RelationshipType.FOUNDER, person=person_one, project=project)
+        PersonalRelationship.objects.create(type=RelationshipType.FOUNDER, person=person_one, project=project)
         self.assertTrue(person_one in project.people())
         self.assertTrue(project in person_one.projects())
 
@@ -31,7 +31,7 @@ class RelationshipTestCase(TestCase):
         founders = Person.objects.founders()
         self.assertFalse(person_one in founders)
         project = Project.objects.get(code="space")
-        Relationship.objects.create(type=RelationshipType.FOUNDER, person=person_one, project=project)
+        PersonalRelationship.objects.create(type=RelationshipType.FOUNDER, person=person_one, project=project)
         founders = Person.objects.founders()
         self.assertTrue(person_one in founders)
 
@@ -40,7 +40,7 @@ class RelationshipTestCase(TestCase):
         person_two = Person.objects.by_email("two@example.com")
         self.assertFalse(person_two in Person.objects.vendors())
         project = Project.objects.get(code="vendor")
-        Relationship.objects.create(type=RelationshipType.VENDOR, person=person_two, project=project)
+        PersonalRelationship.objects.create(type=RelationshipType.VENDOR, person=person_two, project=project)
         self.assertTrue(person_two in Person.objects.vendors())
 
     def test_consultants(self):
@@ -48,5 +48,5 @@ class RelationshipTestCase(TestCase):
         person_three = Person.objects.by_email("three@example.com")
         self.assertFalse(person_three in Person.objects.consultants())
         project = Project.objects.get(code="consult")
-        Relationship.objects.create(type=RelationshipType.CONSULT, person=person_three, project=project)
+        PersonalRelationship.objects.create(type=RelationshipType.CONSULT, person=person_three, project=project)
         self.assertTrue(person_three in Person.objects.consultants())
