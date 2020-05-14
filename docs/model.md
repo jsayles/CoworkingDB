@@ -1,6 +1,5 @@
 # CRDB Data Models
 
-
 Person
  - first_name
  - last_name
