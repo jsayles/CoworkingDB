@@ -10,7 +10,7 @@ django-stubs = "*"
 mypy = "*"
 
 [packages]
-Django = ">=3.0.4"
+Django = ">=3.0.7"
 psycopg2 = "==2.8.5"
 
 # API
